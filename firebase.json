@@ -1,0 +1,22 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "fin-track-db2dd",
+          "appId": "1:628495837289:android:844220a0e41d0451cddaf8",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "fin-track-db2dd",
+          "configurations": {
+            "android": "1:628495837289:android:844220a0e41d0451cddaf8",
+            "ios": "1:628495837289:ios:e887a66bf5d1f002cddaf8"
+          }
+        }
+      }
+    }
+  }
+}
