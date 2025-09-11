@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../domain/model/user.dart';
 import '../../domain/repository/user_repository.dart';
 import '../source/firebase_auth_service.dart';
@@ -26,17 +25,20 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<UserModel> signUp(String email, String password, String username) async {
-    final credential = await service.signUp(email, password);
-    final user = credential.user!;
+    try {
+      final credential = await service.signUp(email, password);
+      final user = credential.user!;
 
-    // update displayName
-    await user.updateDisplayName(username);
+      await user.updateDisplayName(username);
 
-    return UserModel(
-      uid: user.uid,
-      email: user.email,
-      displayName: username, // dùng username
-    );
+      return UserModel(
+        uid: user.uid,
+        email: user.email,
+        displayName: username,
+      );
+    } on FirebaseAuthException catch (e) {
+      rethrow;
+    }
   }
 
   @override
