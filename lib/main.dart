@@ -1,4 +1,5 @@
 import 'package:fin_track/features/auth/presentation/ui/sign_in_screen.dart';
+import 'package:fin_track/features/auth/presentation/ui/sign_up_screen.dart';
 import 'package:fin_track/features/auth/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:fin_track/features/dashboard/ui/dashboard_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
       home: AuthWrapper(),
       routes: {
         '/signIn': (context) => const SignInScreen(),
+        '/signUp': (context) => const SignUpScreen(),
         '/dashboard': (context) => const DashboardScreen()
       },
     );

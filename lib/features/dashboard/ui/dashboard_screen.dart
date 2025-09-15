@@ -313,27 +313,3 @@ class _DashboardScreen extends State<DashboardScreen> {
     );
   }
 }
-
-// @override
-// Widget build(BuildContext context) {
-//   return Center(
-//     child: CupertinoSegmentedControl<int> (
-//       children: {
-//         0: Padding(
-//           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//           child: Text("Expenditure"),
-//         ),
-//         1: Padding (
-//           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//           child: Text("Revenue"),
-//         )
-//       },
-//       groupValue: selectedValue,
-//       onValueChanged: (value) {
-//         setState(() {
-//           selectedValue = value;
-//         });
-//       },
-//     )
-//   );
-// }

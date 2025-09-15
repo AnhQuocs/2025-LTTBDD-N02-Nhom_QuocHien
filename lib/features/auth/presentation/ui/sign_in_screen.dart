@@ -79,7 +79,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               colors: [Colors.blue, Colors.purple],
                             ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
                             child: Text(
-                              'Welcome Back',
+                              'Welcome Back!',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 28,
@@ -207,7 +207,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                                   ),
                                                 );
                                                 await Future.delayed(Duration(seconds: 2));
-                                                Navigator.pushReplacementNamed(context, "/home");
+                                                Navigator.pushReplacementNamed(context, "/dashboard");
                                               } else {
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBar(
@@ -244,7 +244,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         },
                                         child: Center(
                                           child: Text(
-                                            "Login",
+                                            "Sign In",
                                             style: TextStyle(
                                               fontSize: 18,
                                               color: Colors.white,
@@ -363,11 +363,11 @@ class _SignInScreenState extends State<SignInScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  "DON'T HAVE AN ACCOUNT?",
+                                  "Don't have an account?",
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(context, "/register");
+                                    Navigator.pushReplacementNamed(context, "/signUp");
                                   },
                                   style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero
