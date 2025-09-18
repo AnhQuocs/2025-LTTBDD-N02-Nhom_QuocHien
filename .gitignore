@@ -45,3 +45,9 @@ app.*.map.json
 # Generated localization files
 lib/l10n/app_localizations.dart
 lib/l10n/app_localizations_*.dart
+
+# Flutter metadata & devtools
+.metadata
+devtools_options.yaml
+
+.vscode/
