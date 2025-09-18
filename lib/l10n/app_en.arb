@@ -1,0 +1,15 @@
+{
+  "welcome": "Welcome!",
+  "welcome_app": "Welcome to FinTrack!",
+  "@welcome_app": {
+    "description": "This is my app"
+  },
+  "total_balance": "Total Balance",
+  "income": "Income",
+  "expenses": "Expenses",
+  "transactions": "Transactions",
+  "view_all": "View All",
+  "logout": "Logout",
+  "english": "English",
+  "vietnamese": "Vietnamese"
+}

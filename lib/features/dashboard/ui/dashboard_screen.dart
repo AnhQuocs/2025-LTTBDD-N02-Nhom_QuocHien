@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/viewmodel/auth_viewmodel.dart';
 
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final void Function(Locale locale)? onLocaleChange;
+
+  const DashboardScreen({super.key, this.onLocaleChange});
 
   @override
   State<StatefulWidget> createState() => _DashboardScreen();
@@ -17,6 +20,8 @@ class _DashboardScreen extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final tr = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.white,
@@ -40,7 +45,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Welcome!", style: TextStyle(fontSize: 15, color: Colors.black.withOpacity(0.8))),
+                    Text(tr.welcome, style: TextStyle(fontSize: 15, color: Colors.black.withOpacity(0.8))),
                     Text("AnhQuoc", style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
                   ],
                 ),
@@ -95,7 +100,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                       SizedBox(height: 16),
 
                       Text(
-                        "Total Balance",
+                        tr.total_balance,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -144,7 +149,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Income",
+                                      tr.income,
                                       style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.white.withOpacity(0.8)
@@ -193,7 +198,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Expenses",
+                                      tr.expenses,
                                       style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.white.withOpacity(0.8)
@@ -229,7 +234,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Transactions",
+                    tr.transactions,
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
@@ -238,7 +243,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                   ),
 
                   Text(
-                    "View All",
+                    tr.view_all,
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 15
@@ -253,8 +258,28 @@ class _DashboardScreen extends State<DashboardScreen> {
                 final authViewModel = context.read<AuthViewModel>();
                 authViewModel.signOut();
               },
-              child: Text("Logout"),
-            )
+              child: Text(tr.logout),
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    widget.onLocaleChange?.call(const Locale('en'));
+                  },
+                    child: Text('🇺🇸 ${tr.english}'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    widget.onLocaleChange?.call(const Locale('vi'));
+                  },
+                  child: Text('🇻🇳 ${tr.vietnamese}'),
+                ),
+              ],
+            ),
+
           ],
         ),
       ),

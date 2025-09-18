@@ -1,0 +1,12 @@
+{
+  "welcome": "Xin Chào!",
+  "welcome_app": "Chào mừng đến với FinTrack!",
+  "total_balance": "Tổng số dư",
+  "income": "Thu nhập",
+  "expenses": "Chi tiêu",
+  "transactions": "Giao dịch",
+  "view_all": "Xem tất cả",
+  "logout": "Đăng xuất",
+  "english": "Tiếng Anh",
+  "vietnamese": "Tiếng Việt"
+}

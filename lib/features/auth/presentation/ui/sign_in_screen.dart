@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import '../viewmodel/auth_viewmodel.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  final void Function(Locale locale)? onLocaleChange;
+
+  const SignInScreen({super.key, this.onLocaleChange});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
