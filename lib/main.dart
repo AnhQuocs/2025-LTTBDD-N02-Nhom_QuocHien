@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import 'features/auth/data/repository/user_repository_impl.dart';
 import 'features/auth/data/source/firebase_auth_service.dart';
+import 'features/auth/domain/usecase/get_user_usecase.dart';
 import 'features/auth/domain/usecase/reset_password_usecase.dart';
 import 'features/auth/domain/usecase/sign_in_usecase.dart';
 import 'features/auth/domain/usecase/sign_out_usecase.dart';
@@ -35,7 +36,8 @@ void main() async {
                     signInUseCase: SignInUseCase(authRepository),
                     signUpUseCase: SignUpUseCase(authRepository),
                     signOutUseCase: SignOutUseCase(authRepository),
-                    resetPasswordUseCase: ResetPasswordUseCase(authRepository)
+                    resetPasswordUseCase: ResetPasswordUseCase(authRepository),
+                    getCurrentUserUseCase: GetCurrentUserUseCase(authRepository)
                 ),
           )
         ],

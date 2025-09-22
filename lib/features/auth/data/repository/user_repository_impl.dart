@@ -52,4 +52,15 @@ class AuthRepositoryImpl implements AuthRepository {
     return service.authStateChanges().map((user) =>
     user == null ? null : UserModel(uid: user.uid, email: user.email, displayName: user.displayName));
   }
+
+  @override
+  Future<UserModel?> getUser() async {
+    final user = service.currentUser;
+    if (user == null) return null;
+    return UserModel(
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+    );
+  }
 }

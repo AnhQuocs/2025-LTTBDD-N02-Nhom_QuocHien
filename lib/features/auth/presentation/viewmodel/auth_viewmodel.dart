@@ -4,12 +4,14 @@ import 'package:fin_track/features/auth/domain/usecase/sign_out_usecase.dart';
 import 'package:fin_track/features/auth/domain/usecase/sign_up_usecase.dart';
 import 'package:flutter/cupertino.dart';
 import '../../domain/model/user.dart';
+import '../../domain/usecase/get_user_usecase.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final SignInUseCase signInUseCase;
   final SignUpUseCase signUpUseCase;
   final SignOutUseCase signOutUseCase;
   final ResetPasswordUseCase resetPasswordUseCase;
+  final GetCurrentUserUseCase getCurrentUserUseCase;
 
   UserModel? _user;
   String? _error;
@@ -20,6 +22,7 @@ class AuthViewModel extends ChangeNotifier {
     required this.signUpUseCase,
     required this.signOutUseCase,
     required this.resetPasswordUseCase,
+    required this.getCurrentUserUseCase
   });
 
   UserModel? get user => _user;
@@ -75,6 +78,27 @@ class AuthViewModel extends ChangeNotifier {
     try {
       await resetPasswordUseCase(email);
       _error = null;
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadCurrentUser() async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _user = await getCurrentUserUseCase();
+      _error = null;
+
+      if (_user != null) {
+        print('User: ${_user!.displayName}');
+      } else {
+        print('No user logged in');
+      }
     } catch (e) {
       _error = e.toString();
     } finally {

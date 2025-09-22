@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/viewmodel/auth_viewmodel.dart';
 
-
 class DashboardScreen extends StatefulWidget {
   final void Function(Locale locale)? onLocaleChange;
 
@@ -21,320 +20,122 @@ class _DashboardScreen extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final tr = AppLocalizations.of(context)!;
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        // backgroundColor: Colors.white,
-        elevation: 0,
-        toolbarHeight: 65,
-        title: Row(
+    if (authViewModel.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (authViewModel.user == null) {
+      return const Center(child: Text("Chưa đăng nhập"));
+    } else {
+      final user = authViewModel.user;
+
+      return Scaffold(
+        backgroundColor: Color(0xFF00D09E),
+        body: Column(
           children: [
-            ClipOval(
-              child: Image.asset(
-                'assets/images/user_avatar.png',
-                width: 60,
-                height: 60,
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(width: 5),
             Expanded(
-              child: SizedBox(
-                height: 45,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(tr.welcome, style: TextStyle(fontSize: 15, color: Colors.black.withOpacity(0.8))),
-                    Text("AnhQuoc", style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-            ),
-            Spacer(),
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6)
-              ),
-              child: Align(
-                alignment: AlignmentGeometry.center,
-                child: Icon(
-                  Icons.settings,
-                  color: Colors.black.withOpacity(0.6),
-                ),
-              ),
-            ),
-            SizedBox(width: 5),
-          ],
-        ),
-      ),
+              flex: 3,
+              child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Padding(
+                      padding: EdgeInsets.only(top: 32),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${tr.hi}! ${tr.welcome_back}",
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
 
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            GestureDetector(
-              onTap: () {},
-              child: Card(
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                elevation: 6,
-                child: Container(
-                  width: double.infinity,
-                  height: 200,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                          colors: [Color(0xFF00B2E7), Color(0xFFE064F7), Color(0xFFFF8D6C)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight
+                                Text(
+                                    "${user!.displayName}",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    height: 0.5
+                                  ),
+                                )
+                              ],
+                            ),
+
+                            Container(
+                              width: 28,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(100)
+                              ),
+                              child: Icon(Icons.settings, color: Colors.black.withOpacity(0.7),),
+                            )
+                          ],
+                        ),
                       )
-                  ),
-                  padding: EdgeInsets.all(16),
+                  )
+              ),
+            ),
+
+            Expanded(
+              flex: 6,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40)
+                  )
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(24),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      SizedBox(height: 16),
-
-                      Text(
-                        tr.total_balance,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500
-                        ),
+                      ElevatedButton(
+                        onPressed: () {
+                          final authViewModel = context.read<AuthViewModel>();
+                          authViewModel.signOut();
+                        },
+                        child: Text(tr.logout),
                       ),
-
-                      SizedBox(height: 6),
-
-                      Text(
-                        "6.900.000 VND",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32,
-                            fontWeight: FontWeight.w700
-                        ),
-                      ),
-
-                      Spacer(),
 
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.grey.withOpacity(0.5)
-                                ),
-                                child: Align(
-                                  alignment: AlignmentGeometry.center,
-                                  child: Icon(
-                                    Icons.arrow_downward,
-                                    color: Color(0xFF33FF66),
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(width: 10,),
-
-                              SizedBox(
-                                height: 45,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      tr.income,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white.withOpacity(0.8)
-                                      ),
-                                    ),
-
-                                    Text(
-                                      "2.500.000đ",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                          ElevatedButton(
+                            onPressed: () {
+                              widget.onLocaleChange?.call(const Locale('en'));
+                            },
+                            child: Text('🇺🇸 ${tr.english}'),
                           ),
-
-                          Spacer(),
-
-                          Row(
-                            children: [
-                              Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.grey.withOpacity(0.4)
-                                ),
-                                child: Align(
-                                  alignment: AlignmentGeometry.center,
-                                  child: Icon(
-                                    Icons.arrow_upward,
-                                    color: Color(0xFFFF3333),
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(width: 10,),
-
-                              SizedBox(
-                                height: 45,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      tr.expenses,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white.withOpacity(0.8)
-                                      ),
-                                    ),
-
-                                    Text(
-                                      "325.000đ",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          )
+                          const SizedBox(width: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              widget.onLocaleChange?.call(const Locale('vi'));
+                            },
+                            child: Text('🇻🇳 ${tr.vietnamese}'),
+                          ),
                         ],
                       ),
                     ],
                   ),
-                ),
+                )
               ),
-            ),
-
-            SizedBox(height: 16,),
-
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    tr.transactions,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18
-                    ),
-                  ),
-
-                  Text(
-                    tr.view_all,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15
-                    ),
-                  )
-                ],
-              ),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                final authViewModel = context.read<AuthViewModel>();
-                authViewModel.signOut();
-              },
-              child: Text(tr.logout),
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    widget.onLocaleChange?.call(const Locale('en'));
-                  },
-                    child: Text('🇺🇸 ${tr.english}'),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    widget.onLocaleChange?.call(const Locale('vi'));
-                  },
-                  child: Text('🇻🇳 ${tr.vietnamese}'),
-                ),
-              ],
-            ),
-
+            )
           ],
         ),
-      ),
-
-      floatingActionButton: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: LinearGradient(
-            colors: [Color(0xFFFF8D6C), Color(0xFFE064F7), Color(0xFF00B2E7)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          child: Icon(Icons.add, size: 32, color: Colors.white,),
-        ),
-      ),
-
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 6,
-        color: Colors.white,
-        elevation: 8,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedIndex = 0;
-                    });
-                  },
-                  icon: Icon(Icons.grid_view_rounded, color: Colors.black.withOpacity(0.5),)
-              ),
-              IconButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedIndex = 1;
-                    });
-                  },
-                  icon: Icon(Icons.person, color: Colors.black.withOpacity(0.5),)
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+      );
+    }
   }
 }

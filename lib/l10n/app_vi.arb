@@ -1,5 +1,6 @@
 {
   "welcome": "Xin Chào!",
+  "welcome_back": "Mừng trở lại",
   "welcome_app": "Chào mừng đến với FinTrack!",
   "total_balance": "Tổng số dư",
   "income": "Thu nhập",
@@ -8,5 +9,6 @@
   "view_all": "Xem tất cả",
   "logout": "Đăng xuất",
   "english": "Tiếng Anh",
-  "vietnamese": "Tiếng Việt"
+  "vietnamese": "Tiếng Việt",
+  "hi": "Chào"
 }
