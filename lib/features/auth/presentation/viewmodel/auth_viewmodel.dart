@@ -23,7 +23,9 @@ class AuthViewModel extends ChangeNotifier {
     required this.signOutUseCase,
     required this.resetPasswordUseCase,
     required this.getCurrentUserUseCase
-  });
+  }) {
+    loadCurrentUser();
+  }
 
   UserModel? get user => _user;
   String? get error => _error;

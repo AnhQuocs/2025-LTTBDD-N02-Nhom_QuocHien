@@ -2,6 +2,8 @@ import 'package:fin_track/features/auth/presentation/ui/sign_in_screen.dart';
 import 'package:fin_track/features/auth/presentation/ui/sign_up_screen.dart';
 import 'package:fin_track/features/auth/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:fin_track/features/dashboard/ui/dashboard_screen.dart';
+import 'package:fin_track/features/transaction/data/datasource/hive_datasource.dart';
+import 'package:fin_track/features/transaction/data/repositories/transaction_repository_impl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,15 @@ import 'features/auth/domain/usecase/reset_password_usecase.dart';
 import 'features/auth/domain/usecase/sign_in_usecase.dart';
 import 'features/auth/domain/usecase/sign_out_usecase.dart';
 import 'features/auth/domain/usecase/sign_up_usecase.dart';
+import 'features/transaction/domain/usecases/add_transaction_usecase.dart';
+import 'features/transaction/domain/usecases/delete_transaction_usecase.dart';
+import 'features/transaction/domain/usecases/get_all_transaction_usecase.dart';
+import 'features/transaction/domain/usecases/get_daily_budget_usecase.dart';
+import 'features/transaction/domain/usecases/get_daily_progress_usecase.dart';
+import 'features/transaction/domain/usecases/get_total_balance_use_case.dart';
+import 'features/transaction/domain/usecases/update_daily_pudget_usecase.dart';
+import 'features/transaction/domain/usecases/update_transaction_usecase.dart';
+import 'features/transaction/presentation/viewmodel/transaction_view_model.dart';
 import 'firebase_options.dart';
 import 'l10n/app_localizations.dart';
 
@@ -24,12 +35,27 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Auth
   final authService = FirebaseAuthService();
   final authRepository = AuthRepositoryImpl(authService);
+
+  // Hive
+  final hive = HiveDataSource();
+  await hive.init(clearOldData: false);
+
+  final repository = TransactionRepositoryImpl(hive);
+
+  final addTransactionUseCase = AddTransactionUseCase(repository);
+  final updateTransactionUseCase = UpdateTransactionUseCase(repository);
+  final deleteTransactionUseCase = DeleteTransactionUseCase(repository);
+  final getAllTransactionsUseCase = GetAllTransactionsUseCase(repository);
+  final getTotalBalanceUseCase = GetTotalBalanceUseCase(repository);
+  final getDailyProgressUseCase = GetDailyProgressUseCase(repository);
 
   runApp(
       MultiProvider(
         providers: [
+          // AuthViewModel provider
           ChangeNotifierProvider(
             create: (_) =>
                 AuthViewModel(
@@ -39,7 +65,21 @@ void main() async {
                     resetPasswordUseCase: ResetPasswordUseCase(authRepository),
                     getCurrentUserUseCase: GetCurrentUserUseCase(authRepository)
                 ),
-          )
+          ),
+
+          // TransactionViewModel provider
+          ChangeNotifierProvider(
+            create: (_) => TransactionViewModel(
+                addTransactionUseCase: addTransactionUseCase,
+                updateTransactionUseCase: updateTransactionUseCase,
+                deleteTransactionUseCase: deleteTransactionUseCase,
+                getAllTransactionsUseCase: getAllTransactionsUseCase,
+                getTotalBalanceUseCase: getTotalBalanceUseCase,
+                getDailyProgressUseCase: getDailyProgressUseCase,
+                updateDailyBudgetUseCase: UpdateDailyBudgetUseCase(repository),
+                getDailyBudgetUseCase: GetDailyBudgetUseCase(repository)
+            ),
+          ),
         ],
         child: const MyApp(),
       ),
@@ -107,6 +147,9 @@ class AuthWrapper extends StatelessWidget {
         }
 
         if (snapshot.hasData) {
+          // login -> load transactions for current user
+          final txVm = Provider.of<TransactionViewModel>(context, listen: false);
+          txVm.loadTransactions(userId: snapshot.data!.uid);
           return DashboardScreen(onLocaleChange: onLocaleChange);
         }
 
