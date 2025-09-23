@@ -7,6 +7,7 @@ abstract class TransactionRepository {
   Future<void> deleteTransaction(String id);
   List<Transaction> getAllTransactions({String? userId});
   double getTotalBalance();
+  double getTotalExpense();
   double getDailyProgress(DateTime date);
   Future<DailyBudget?> getDailyBudget(DateTime date);
   Future<void> updateDailyBudget(DailyBudget dailyBudget);

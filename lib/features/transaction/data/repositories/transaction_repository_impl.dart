@@ -67,6 +67,19 @@ class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @override
+  double getTotalExpense() {
+    double expense = 0;
+
+    for(var tx in hive.transactionBox.values) {
+      if(tx.type == TransactionType.Expense) {
+        expense += tx.price;
+      }
+    }
+
+    return expense;
+  }
+
+  @override
   double getDailyProgress(DateTime date) {
     final dateKey = DateTime(date.year, date.month, date.day);
     final budget = hive.dailyBudgetBox.get(dateKey.toIso8601String());

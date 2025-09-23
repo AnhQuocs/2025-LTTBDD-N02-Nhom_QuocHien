@@ -4,6 +4,7 @@ import 'package:fin_track/features/auth/presentation/viewmodel/auth_viewmodel.da
 import 'package:fin_track/features/dashboard/ui/dashboard_screen.dart';
 import 'package:fin_track/features/transaction/data/datasource/hive_datasource.dart';
 import 'package:fin_track/features/transaction/data/repositories/transaction_repository_impl.dart';
+import 'package:fin_track/features/transaction/domain/usecases/get_total_expense_usecase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,7 @@ void main() async {
   final deleteTransactionUseCase = DeleteTransactionUseCase(repository);
   final getAllTransactionsUseCase = GetAllTransactionsUseCase(repository);
   final getTotalBalanceUseCase = GetTotalBalanceUseCase(repository);
+  final getTotalExpenseUseCase = GetTotalExpenseUseCase(repository);
   final getDailyProgressUseCase = GetDailyProgressUseCase(repository);
 
   runApp(
@@ -75,6 +77,7 @@ void main() async {
                 deleteTransactionUseCase: deleteTransactionUseCase,
                 getAllTransactionsUseCase: getAllTransactionsUseCase,
                 getTotalBalanceUseCase: getTotalBalanceUseCase,
+                getTotalExpenseUseCase: getTotalExpenseUseCase,
                 getDailyProgressUseCase: getDailyProgressUseCase,
                 updateDailyBudgetUseCase: UpdateDailyBudgetUseCase(repository),
                 getDailyBudgetUseCase: GetDailyBudgetUseCase(repository)

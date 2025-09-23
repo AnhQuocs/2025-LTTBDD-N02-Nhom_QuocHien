@@ -6,6 +6,7 @@
     "description": "This is my app"
   },
   "total_balance": "Total Balance",
+  "total_expense": "Total Expense",
   "income": "Income",
   "expenses": "Expenses",
   "transactions": "Transactions",
@@ -13,5 +14,17 @@
   "logout": "Logout",
   "english": "English",
   "vietnamese": "Vietnamese",
-  "hi": "Hi"
+  "hi": "Hi",
+  "expense_looks_good": "of your expenses, looks good.",
+  "expense_keep_an_eye": "spent, keep an eye on your spending.",
+  "expense_slowing_down": "spent already, consider slowing down.",
+  "expense_almost_limit": "spent — almost reaching your limit!",
+  "set_goal": "Set your daily spending goal!",
+  "set_now": "Set now",
+  "update": "Update",
+  "set_daily_spending": "Set Daily Spending",
+  "daily_spending_limit": "Daily Spending Limit",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "save": "Save"
 }

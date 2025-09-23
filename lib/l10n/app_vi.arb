@@ -3,6 +3,7 @@
   "welcome_back": "Mừng trở lại",
   "welcome_app": "Chào mừng đến với FinTrack!",
   "total_balance": "Tổng số dư",
+  "total_expense": "Tổng chi tiêu",
   "income": "Thu nhập",
   "expenses": "Chi tiêu",
   "transactions": "Giao dịch",
@@ -10,5 +11,17 @@
   "logout": "Đăng xuất",
   "english": "Tiếng Anh",
   "vietnamese": "Tiếng Việt",
-  "hi": "Chào"
+  "hi": "Chào",
+  "expense_looks_good": "đã chi tiêu, rất ổn.",
+  "expense_keep_an_eye": "đã chi tiêu, hãy chú ý hơn.",
+  "expense_slowing_down": "đã chi tiêu, nên cân nhắc chậm lại.",
+  "expense_almost_limit": "đã chi tiêu — sắp chạm giới hạn!",
+  "set_goal": "Thiết lập mục tiêu chi tiêu trong ngày của bạn!",
+  "set_now": "Thiết lập",
+  "update": "Cập nhật",
+  "set_daily_spending": "Thiết lập chi tiêu",
+  "daily_spending_limit": "Giới hạn chi tiêu",
+  "cancel": "Hủy",
+  "delete": "Xóa",
+  "save": "Lưu"
 }

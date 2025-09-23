@@ -1,4 +1,5 @@
 
+import 'package:fin_track/features/transaction/domain/usecases/get_total_expense_usecase.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/daily_budget.dart';
@@ -18,6 +19,7 @@ class TransactionViewModel extends ChangeNotifier {
   final DeleteTransactionUseCase deleteTransactionUseCase;
   final GetAllTransactionsUseCase getAllTransactionsUseCase;
   final GetTotalBalanceUseCase getTotalBalanceUseCase;
+  final GetTotalExpenseUseCase getTotalExpenseUseCase;
   final GetDailyProgressUseCase getDailyProgressUseCase;
   final UpdateDailyBudgetUseCase updateDailyBudgetUseCase;
   final GetDailyBudgetUseCase getDailyBudgetUseCase;
@@ -28,6 +30,7 @@ class TransactionViewModel extends ChangeNotifier {
     required this.deleteTransactionUseCase,
     required this.getAllTransactionsUseCase,
     required this.getTotalBalanceUseCase,
+    required this.getTotalExpenseUseCase,
     required this.getDailyProgressUseCase,
     required this.updateDailyBudgetUseCase,
     required this.getDailyBudgetUseCase,
@@ -42,6 +45,8 @@ class TransactionViewModel extends ChangeNotifier {
   DailyBudget? todayBudget;
 
   double get totalBalance => getTotalBalanceUseCase.call();
+
+  double get totalExpense => getTotalExpenseUseCase.call();
 
   Future<void> loadTransactions({String? userId}) async {
     _loading = true;
