@@ -16,9 +16,9 @@ class ExpenseProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tr = AppLocalizations.of(context)!;
-    final progress = (limit > 0) ? (spent / limit).clamp(0.0, 1.0): 0.0;
-    final percentValue = (progress * 100).clamp(0, 100).toDouble();
+    final l10n = AppLocalizations.of(context)!;
+    final progress = (limit > 0) ? (spent / limit) : 0.0;
+    final percentValue = progress * 100;
     final percent = percentValue.toStringAsFixed(0);
 
     return Column(
@@ -40,7 +40,7 @@ class ExpenseProgressBar extends StatelessWidget {
               curve: Curves.easeOutCubic,
               builder: (context, value, _) {
                 return FractionallySizedBox(
-                  widthFactor: value,
+                  widthFactor: value.clamp(0.0, 1.0),
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -55,7 +55,7 @@ class ExpenseProgressBar extends StatelessWidget {
                           color: Colors.black,
                           borderRadius: BorderRadius.horizontal(
                             left: const Radius.circular(16),
-                            right: value == 1
+                            right: value >= 1
                                 ? const Radius.circular(16)
                                 : Radius.zero,
                           ),
@@ -95,7 +95,6 @@ class ExpenseProgressBar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Text phần trăm
                     Text(
                       "${(progress * 100).toStringAsFixed(0)}%",
                       style: TextStyle(
@@ -104,7 +103,6 @@ class ExpenseProgressBar extends StatelessWidget {
                       ),
                     ),
 
-                    // Text limit
                     Text(
                     currencyFormat.format(limit),
                       style: TextStyle(
@@ -131,7 +129,7 @@ class ExpenseProgressBar extends StatelessWidget {
                   children: [
                     Icon(Icons.check_box_outlined, size: 18,),
                     SizedBox(width: 4,),
-                    Text("$percent% ${tr.expense_looks_good}",
+                    Text("$percent% ${l10n.expense_looks_good}",
                         style: Theme.of(context).textTheme.bodyMedium
                     )
                   ],
@@ -144,7 +142,7 @@ class ExpenseProgressBar extends StatelessWidget {
                     Icon(Icons.visibility, size: 18,),
                     SizedBox(width: 4,),
                     Text(
-                      "$percent% ${tr.expense_keep_an_eye}",
+                      "$percent% ${l10n.expense_keep_an_eye}",
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   ],
@@ -157,23 +155,35 @@ class ExpenseProgressBar extends StatelessWidget {
                       Icon(Icons.warning_amber_outlined, size: 18,),
                       SizedBox(width: 4,),
                       Text(
-                        "$percent% ${tr.expense_slowing_down}",
+                        "$percent% ${l10n.expense_slowing_down}",
                         style: Theme.of(context).textTheme.bodyMedium,
                       )
                     ],
                   )
-                else
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.error_outline, size: 18,),
-                      SizedBox(width: 4,),
-                      Text(
-                        "$percent% ${tr.expense_almost_limit}",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      )
-                    ],
-                  ),
+                else if (percentValue > 80 && percentValue < 100)
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline, size: 18,),
+                        SizedBox(width: 4,),
+                        Text(
+                          "$percent% ${l10n.expense_almost_limit}",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        )
+                      ],
+                    )
+                  else
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.block, size: 18, color: Colors.red),
+                        SizedBox(width: 4,),
+                        Text(
+                          "$percent% ${l10n.expense_over_limit}",
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                        )
+                      ],
+                    ),
 
               SizedBox(height: 12,),
 
@@ -208,7 +218,7 @@ class ExpenseProgressBar extends StatelessWidget {
                           Icon(Icons.wallet, size: 18, color: Colors.white),
                           SizedBox(width: 6),
                           Text(
-                            tr.update,
+                            l10n.update,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,

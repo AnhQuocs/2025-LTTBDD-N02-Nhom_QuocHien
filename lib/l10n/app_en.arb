@@ -19,6 +19,7 @@
   "expense_keep_an_eye": "spent, keep an eye on your spending.",
   "expense_slowing_down": "spent already, consider slowing down.",
   "expense_almost_limit": "spent — almost reaching your limit!",
+  "expense_over_limit": "spent — you have exceeded your budget!",
   "set_goal": "Set your daily spending goal!",
   "set_now": "Set now",
   "update": "Update",
@@ -26,5 +27,15 @@
   "daily_spending_limit": "Daily Spending Limit",
   "cancel": "Cancel",
   "delete": "Delete",
-  "save": "Save"
+  "save": "Save",
+  "invalid_number": "Invalid number",
+
+  "add_transaction": "Add Transaction",
+  "title": "Title",
+  "validate_title_empty": "Title cannot be empty",
+  "price": "Price",
+  "validate_price_empty": "Price cannot be empty",
+  "category": "Category",
+  "date": "Date",
+  "note": "Note"
 }

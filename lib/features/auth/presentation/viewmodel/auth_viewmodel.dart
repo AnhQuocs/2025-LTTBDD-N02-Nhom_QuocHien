@@ -22,7 +22,7 @@ class AuthViewModel extends ChangeNotifier {
     required this.signUpUseCase,
     required this.signOutUseCase,
     required this.resetPasswordUseCase,
-    required this.getCurrentUserUseCase
+    required this.getCurrentUserUseCase,
   }) {
     loadCurrentUser();
   }
@@ -30,6 +30,8 @@ class AuthViewModel extends ChangeNotifier {
   UserModel? get user => _user;
   String? get error => _error;
   bool get isLoading => _isLoading;
+
+  String? get currentUserId => _user?.uid;
 
   Future<void> signIn(String email, String password) async {
     _isLoading = true;

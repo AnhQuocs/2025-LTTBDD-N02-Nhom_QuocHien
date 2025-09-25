@@ -16,6 +16,7 @@
   "expense_keep_an_eye": "đã chi tiêu, hãy chú ý hơn.",
   "expense_slowing_down": "đã chi tiêu, nên cân nhắc chậm lại.",
   "expense_almost_limit": "đã chi tiêu — sắp chạm giới hạn!",
+  "expense_over_limit": "chi tiêu - đã vượt quá giới hạn!",
   "set_goal": "Thiết lập mục tiêu chi tiêu trong ngày của bạn!",
   "set_now": "Thiết lập",
   "update": "Cập nhật",
@@ -23,5 +24,15 @@
   "daily_spending_limit": "Giới hạn chi tiêu",
   "cancel": "Hủy",
   "delete": "Xóa",
-  "save": "Lưu"
+  "save": "Lưu",
+  "invalid_number": "Số tiền không hợp lệ",
+
+  "add_transaction": "Thêm giao dịch",
+  "title": "Tiêu đề",
+  "validate_title_empty": "Tiêu đề không được để trống",
+  "price": "Số tiền",
+  "validate_price_empty": "Số tiền không được để trống",
+  "category": "Danh mục",
+  "date": "Ngày",
+  "note": "Ghi chú"
 }

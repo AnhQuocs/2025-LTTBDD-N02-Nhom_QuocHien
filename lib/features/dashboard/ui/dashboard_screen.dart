@@ -2,10 +2,10 @@ import 'package:fin_track/features/transaction/presentation/viewmodel/transactio
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/viewmodel/auth_viewmodel.dart';
 import '../../transaction/domain/entities/daily_budget.dart';
+import '../../transaction/presentation/ui/transaction_form.dart';
 import 'expense_progress_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -33,7 +33,7 @@ class _DashboardScreen extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tr = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
     final authViewModel = Provider.of<AuthViewModel>(context);
     final transactionViewModel = Provider.of<TransactionViewModel>(context);
 
@@ -42,7 +42,7 @@ class _DashboardScreen extends State<DashboardScreen> {
     }
 
     if (authViewModel.user == null) {
-      return const Center(child: Text("Chưa đăng nhập"));
+      return const Center(child: Text("Error"));
     } else {
       final user = authViewModel.user;
 
@@ -69,7 +69,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${tr.hi}! ${tr.welcome_back}",
+                                      "${l10n.hi}! ${l10n.welcome_back}",
                                       style: TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
@@ -116,7 +116,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                                       Icon(Icons.arrow_circle_up, color: Colors.black, size: 20,),
                                       SizedBox(width: 4,),
                                       Text(
-                                        tr.total_balance,
+                                        l10n.total_balance,
                                         style: TextStyle(
                                           color: Colors.black,
                                         ),
@@ -152,7 +152,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                                       Icon(Icons.arrow_circle_down, color: Colors.black, size: 20,),
                                       SizedBox(width: 4,),
                                       Text(
-                                        tr.total_expense,
+                                        l10n.total_expense,
                                         style: TextStyle(
                                           color: Colors.black,
                                         ),
@@ -180,7 +180,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                             Column(
                               children: [
                                 Text(
-                                  tr.set_goal,
+                                  l10n.set_goal,
                                   style: TextStyle(
                                     fontSize: 16
                                   ),
@@ -219,7 +219,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                                           Icon(Icons.wallet, size: 18, color: Colors.white),
                                           SizedBox(width: 6),
                                           Text(
-                                            tr.set_now,
+                                            l10n.set_now,
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
@@ -249,26 +249,28 @@ class _DashboardScreen extends State<DashboardScreen> {
               flex: 6,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFF1FFF3),
-                  borderRadius: BorderRadius.only(
+                  color: const Color(0xFFF1FFF3),
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40)
-                  )
+                    topRight: Radius.circular(40),
+                  ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      // Logout button
                       ElevatedButton(
                         onPressed: () {
                           final authViewModel = context.read<AuthViewModel>();
                           authViewModel.signOut();
                         },
-                        child: Text(tr.logout),
+                        child: Text(l10n.logout),
                       ),
 
+                      const SizedBox(height: 16),
+
+                      // Language switch
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -276,20 +278,28 @@ class _DashboardScreen extends State<DashboardScreen> {
                             onPressed: () {
                               widget.onLocaleChange?.call(const Locale('en'));
                             },
-                            child: Text('🇺🇸 ${tr.english}'),
+                            child: Text('🇺🇸 ${l10n.english}'),
                           ),
                           const SizedBox(width: 10),
                           ElevatedButton(
                             onPressed: () {
                               widget.onLocaleChange?.call(const Locale('vi'));
                             },
-                            child: Text('🇻🇳 ${tr.vietnamese}'),
+                            child: Text('🇻🇳 ${l10n.vietnamese}'),
                           ),
                         ],
                       ),
+
+                      const SizedBox(height: 24),
+
+                      // Expanded(
+                      //   child: SingleChildScrollView(
+                      //     child: TransactionForm(),
+                      //   ),
+                      // ),
                     ],
                   ),
-                )
+                ),
               ),
             )
           ],
@@ -301,7 +311,7 @@ class _DashboardScreen extends State<DashboardScreen> {
 
 Future<void> showDailyBudgetDialog(BuildContext context) async {
   final _formKey = GlobalKey<FormState>();
-  final tr = AppLocalizations.of(context)!;
+  final l10n = AppLocalizations.of(context)!;
   double? limit;
 
   final vm = Provider.of<TransactionViewModel>(context, listen: false);
@@ -317,7 +327,7 @@ Future<void> showDailyBudgetDialog(BuildContext context) async {
           borderRadius: BorderRadius.circular(20),
         ),
         title: Text(
-          tr.set_daily_spending,
+          l10n.set_daily_spending,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -332,12 +342,12 @@ Future<void> showDailyBudgetDialog(BuildContext context) async {
                 : "",
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: tr.daily_spending_limit,
+              labelText: l10n.daily_spending_limit,
               labelStyle: TextStyle(color: Colors.black),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              prefixIcon: Icon(Icons.account_balance_wallet, color: Colors.black,),
+              prefixIcon: Icon(Icons.account_balance_wallet, color: Colors.black),
               suffixIcon: Padding(
                 padding: const EdgeInsets.only(right: 12, top: 12),
                 child: Text(
@@ -350,19 +360,28 @@ Future<void> showDailyBudgetDialog(BuildContext context) async {
                 ),
               ),
             ),
-            validator: (val) =>
-            val == null || double.tryParse(val) == null
-                ? "Invalid number"
-                : null,
-            onSaved: (val) => limit = double.parse(val!),
+            validator: (val) {
+              if (val == null || val.trim().isEmpty) return l10n.invalid_number;
+              try {
+                NumberFormat.decimalPattern('vi').parse(val.trim());
+                return null;
+              } catch (_) {
+                return l10n.invalid_number;
+              }
+            },
+            onSaved: (val) {
+              if (val == null) return;
+              limit = NumberFormat.decimalPattern('vi').parse(val.trim()).toDouble();
+            },
           ),
         ),
         actionsPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(tr.cancel, style: TextStyle(color: Colors.black)),
+            child: Text(l10n.cancel, style: TextStyle(color: Colors.black)),
           ),
+
           TextButton(
             onPressed: (currentLimit == null || currentLimit == 0)
                 ? null
@@ -377,10 +396,11 @@ Future<void> showDailyBudgetDialog(BuildContext context) async {
               Navigator.pop(context);
             },
             child: Text(
-              tr.delete,
+              l10n.delete,
               style: TextStyle(color: Colors.red),
             ),
           ),
+
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFF00D09E),
@@ -402,7 +422,7 @@ Future<void> showDailyBudgetDialog(BuildContext context) async {
                 Navigator.pop(context);
               }
             },
-            child: Text(tr.save, style: TextStyle(color: Colors.white),),
+            child: Text(l10n.save, style: TextStyle(color: Colors.white),),
           ),
         ],
       );
