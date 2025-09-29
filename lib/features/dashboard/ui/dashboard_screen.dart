@@ -1,3 +1,4 @@
+import 'package:fin_track/features/dashboard/ui/segmented_control.dart';
 import 'package:fin_track/features/dashboard/ui/transaction_today_card.dart';
 import 'package:fin_track/features/transaction/presentation/viewmodel/transaction_view_model.dart';
 import 'package:flutter/material.dart';
@@ -296,11 +297,13 @@ class _DashboardScreen extends State<DashboardScreen> {
 
                       const SizedBox(height: 24),
 
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: TransactionForm(),
-                        ),
-                      ),
+                      SegmentedControl(),
+
+                      // Expanded(
+                      //   child: SingleChildScrollView(
+                      //     child: TransactionForm(),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

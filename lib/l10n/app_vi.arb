@@ -36,5 +36,8 @@
   "category": "Danh mục",
   "date": "Ngày",
   "note": "Ghi chú",
-  "today": "Hôm nay"
+  "today": "Hôm nay",
+  "daily": "Ngày",
+  "weekly": "Tuần",
+  "monthly": "Tháng"
 }

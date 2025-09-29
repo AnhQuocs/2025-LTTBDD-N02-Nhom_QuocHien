@@ -39,5 +39,8 @@
   "category": "Category",
   "date": "Date",
   "note": "Note",
-  "today": "Today"
+  "today": "Today",
+  "daily": "Daily",
+  "weekly": "Weekly",
+  "monthly": "Monthly"
 }
