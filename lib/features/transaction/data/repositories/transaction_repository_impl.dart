@@ -2,6 +2,7 @@ import 'package:fin_track/features/transaction/data/datasource/hive_datasource.d
 import 'package:fin_track/features/transaction/domain/entities/daily_budget.dart';
 import 'package:fin_track/features/transaction/domain/repositories/transaction_repository.dart';
 
+import '../../domain/entities/daily_summary.dart';
 import '../../domain/entities/transaction.dart';
 
 class TransactionRepositoryImpl implements TransactionRepository {
@@ -114,5 +115,41 @@ class TransactionRepositoryImpl implements TransactionRepository {
     } else {
       await box.add(dailyBudget);
     }
+  }
+
+  /// Tính toán thu/chi theo ngày
+  @override
+  Future<List<DailySummary>> getDailySummaries({String? userId}) async {
+    final transactions = await getAllTransactions(userId: userId);
+
+    final Map<DateTime, DailySummary> summaryMap = {};
+
+    for (var tx in transactions) {
+      final date = DateTime(tx.date.year, tx.date.month, tx.date.day);
+
+      if (!summaryMap.containsKey(date)) {
+        summaryMap[date] = DailySummary(date: date, income: 0, expense: 0);
+      }
+
+      final current = summaryMap[date]!;
+      if (tx.type == TransactionType.Income) {
+        summaryMap[date] = DailySummary(
+          date: date,
+          income: current.income + tx.price,
+          expense: current.expense,
+        );
+      } else {
+        summaryMap[date] = DailySummary(
+          date: date,
+          income: current.income,
+          expense: current.expense + tx.price,
+        );
+      }
+    }
+
+    final result = summaryMap.values.toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+
+    return result;
   }
 }

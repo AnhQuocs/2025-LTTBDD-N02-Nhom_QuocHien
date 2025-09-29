@@ -2,6 +2,7 @@
   "welcome": "Xin Chào!",
   "welcome_back": "Mừng trở lại",
   "welcome_app": "Chào mừng đến với FinTrack!",
+  "total": "Tổng",
   "total_balance": "Tổng số dư",
   "total_expense": "Tổng chi tiêu",
   "income": "Thu nhập",
@@ -34,5 +35,6 @@
   "validate_price_empty": "Số tiền không được để trống",
   "category": "Danh mục",
   "date": "Ngày",
-  "note": "Ghi chú"
+  "note": "Ghi chú",
+  "today": "Hôm nay"
 }

@@ -1,7 +1,9 @@
+import 'package:fin_track/features/dashboard/ui/transaction_today_card.dart';
 import 'package:fin_track/features/transaction/presentation/viewmodel/transaction_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/viewmodel/auth_viewmodel.dart';
 import '../../transaction/domain/entities/daily_budget.dart';
@@ -259,6 +261,8 @@ class _DashboardScreen extends State<DashboardScreen> {
                   padding: const EdgeInsets.all(24),
                   child: Column(
                     children: [
+                      TransactionTodayCard(),
+
                       // Logout button
                       ElevatedButton(
                         onPressed: () {
@@ -292,11 +296,11 @@ class _DashboardScreen extends State<DashboardScreen> {
 
                       const SizedBox(height: 24),
 
-                      // Expanded(
-                      //   child: SingleChildScrollView(
-                      //     child: TransactionForm(),
-                      //   ),
-                      // ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: TransactionForm(),
+                        ),
+                      ),
                     ],
                   ),
                 ),

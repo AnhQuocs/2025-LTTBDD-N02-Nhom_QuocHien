@@ -4,6 +4,7 @@ import 'package:fin_track/features/auth/presentation/viewmodel/auth_viewmodel.da
 import 'package:fin_track/features/dashboard/ui/dashboard_screen.dart';
 import 'package:fin_track/features/transaction/data/datasource/hive_datasource.dart';
 import 'package:fin_track/features/transaction/data/repositories/transaction_repository_impl.dart';
+import 'package:fin_track/features/transaction/domain/usecases/get_daily_summaries_usecase.dart';
 import 'package:fin_track/features/transaction/domain/usecases/get_total_expense_usecase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -80,7 +81,8 @@ void main() async {
                 getTotalExpenseUseCase: getTotalExpenseUseCase,
                 getDailyProgressUseCase: getDailyProgressUseCase,
                 updateDailyBudgetUseCase: UpdateDailyBudgetUseCase(repository),
-                getDailyBudgetUseCase: GetDailyBudgetUseCase(repository)
+                getDailyBudgetUseCase: GetDailyBudgetUseCase(repository),
+                getDailySummariesUseCase: GetDailySummariesUseCase(repository)
             ),
           ),
         ],

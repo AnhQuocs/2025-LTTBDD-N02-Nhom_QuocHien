@@ -5,6 +5,7 @@
   "@welcome_app": {
     "description": "This is my app"
   },
+  "total": "Total",
   "total_balance": "Total Balance",
   "total_expense": "Total Expense",
   "income": "Income",
@@ -37,5 +38,6 @@
   "validate_price_empty": "Price cannot be empty",
   "category": "Category",
   "date": "Date",
-  "note": "Note"
+  "note": "Note",
+  "today": "Today"
 }

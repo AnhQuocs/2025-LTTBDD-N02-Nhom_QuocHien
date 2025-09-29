@@ -1,4 +1,5 @@
 import '../entities/daily_budget.dart';
+import '../entities/daily_summary.dart';
 import '../entities/transaction.dart';
 
 abstract class TransactionRepository {
@@ -11,4 +12,5 @@ abstract class TransactionRepository {
   double getDailyProgress(DateTime date);
   Future<DailyBudget?> getDailyBudget(DateTime date);
   Future<void> updateDailyBudget(DailyBudget dailyBudget);
+  Future<List<DailySummary>> getDailySummaries({String? userId});
 }
