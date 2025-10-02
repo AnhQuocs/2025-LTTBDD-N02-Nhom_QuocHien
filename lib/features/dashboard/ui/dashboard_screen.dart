@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/viewmodel/auth_viewmodel.dart';
 import '../../transaction/domain/entities/daily_budget.dart';
-import '../../transaction/presentation/ui/transaction_form.dart';
 import 'expense_progress_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -21,9 +20,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreen extends State<DashboardScreen> {
-  int selectedValue = 0;
-  int selectedIndex = 0;
-
   @override
   void initState() {
     super.initState();
@@ -260,51 +256,17 @@ class _DashboardScreen extends State<DashboardScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      TransactionTodayCard(),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch, // cho full width
+                      children: [
+                        TransactionTodayCard(),
 
-                      // Logout button
-                      ElevatedButton(
-                        onPressed: () {
-                          final authViewModel = context.read<AuthViewModel>();
-                          authViewModel.signOut();
-                        },
-                        child: Text(l10n.logout),
-                      ),
+                        const SizedBox(height: 24),
 
-                      const SizedBox(height: 16),
-
-                      // Language switch
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              widget.onLocaleChange?.call(const Locale('en'));
-                            },
-                            child: Text('🇺🇸 ${l10n.english}'),
-                          ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: () {
-                              widget.onLocaleChange?.call(const Locale('vi'));
-                            },
-                            child: Text('🇻🇳 ${l10n.vietnamese}'),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      SegmentedControl(),
-
-                      // Expanded(
-                      //   child: SingleChildScrollView(
-                      //     child: TransactionForm(),
-                      //   ),
-                      // ),
-                    ],
+                        SegmentedControl(),
+                      ],
+                    ),
                   ),
                 ),
               ),

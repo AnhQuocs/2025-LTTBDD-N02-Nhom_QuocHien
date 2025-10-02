@@ -225,7 +225,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               ),
                                             );
                                             await Future.delayed(const Duration(seconds: 2));
-                                            Navigator.pushReplacementNamed(context, "/dashboard");
+                                            Navigator.pushReplacementNamed(context, "/home");
                                           } else {
                                             ScaffoldMessenger.of(context).showSnackBar(
                                               const SnackBar(

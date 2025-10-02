@@ -2,6 +2,7 @@ import 'package:fin_track/features/auth/presentation/ui/sign_in_screen.dart';
 import 'package:fin_track/features/auth/presentation/ui/sign_up_screen.dart';
 import 'package:fin_track/features/auth/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:fin_track/features/dashboard/ui/dashboard_screen.dart';
+import 'package:fin_track/features/main/main_screen.dart';
 import 'package:fin_track/features/transaction/data/datasource/hive_datasource.dart';
 import 'package:fin_track/features/transaction/data/repositories/transaction_repository_impl.dart';
 import 'package:fin_track/features/transaction/domain/usecases/get_daily_summaries_usecase.dart';
@@ -129,7 +130,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/signIn': (context) => const SignInScreen(),
         '/signUp': (context) => const SignUpScreen(),
-        '/dashboard': (context) => const DashboardScreen(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }
@@ -155,7 +156,7 @@ class AuthWrapper extends StatelessWidget {
           // login -> load transactions for current user
           final txVm = Provider.of<TransactionViewModel>(context, listen: false);
           txVm.loadTransactions(userId: snapshot.data!.uid);
-          return DashboardScreen(onLocaleChange: onLocaleChange);
+          return HomeScreen(onLocaleChange: onLocaleChange);
         }
 
         return SignInScreen(onLocaleChange: onLocaleChange);

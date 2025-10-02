@@ -209,7 +209,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                                   ),
                                                 );
                                                 await Future.delayed(Duration(seconds: 2));
-                                                Navigator.pushReplacementNamed(context, "/dashboard");
+                                                Navigator.pushReplacementNamed(context, "/home");
                                               } else {
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBar(
