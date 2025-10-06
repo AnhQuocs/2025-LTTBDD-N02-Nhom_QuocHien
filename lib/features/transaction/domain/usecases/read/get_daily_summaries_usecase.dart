@@ -1,5 +1,5 @@
-import '../entities/daily_summary.dart';
-import '../repositories/transaction_repository.dart';
+import '../../entities/daily_summary.dart';
+import '../../repositories/transaction_repository.dart';
 
 class GetDailySummariesUseCase {
   final TransactionRepository repository;

@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -54,7 +57,7 @@ class DailySummaryChart extends StatelessWidget {
     final safeMaxY = maxY < 1000 ? 1000 : maxY;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: const Color(0xFFDFF8E3),
         borderRadius: BorderRadius.circular(20),
@@ -69,11 +72,6 @@ class DailySummaryChart extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (viewModel.startOfWeek != null && viewModel.endOfWeek != null)
-                    Text(
-                      "${_fmt(viewModel.startOfWeek!)} - ${_fmt(viewModel.endOfWeek!)}",
-                      style: const TextStyle(fontSize: 12, color: Colors.black54),
-                    ),
                   Text(
                     "${l10n.income} & ${l10n.expenses}",
                     style: const TextStyle(
@@ -82,15 +80,39 @@ class DailySummaryChart extends StatelessWidget {
                       color: Colors.black87,
                     ),
                   ),
+
+                  if (viewModel.startOfWeek != null && viewModel.endOfWeek != null)
+                    Text(
+                      "${_fmt(viewModel.startOfWeek!)} - ${_fmt(viewModel.endOfWeek!)}",
+                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF2F80ED)),
+                    ),
                 ],
               ),
-              IconButton(
-                icon: const Icon(Icons.calendar_month_rounded, color: Colors.black87, size: 22),
-                onPressed: onSelectWeek,
-              ),
+              Container(
+                height: 34,
+                width: 34,
+                decoration: BoxDecoration(
+                  color: Color(0xFF00D09E),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: onSelectWeek,
+                    child: Center(
+                      child: Icon(
+                        Icons.calendar_month_sharp,
+                        color: Colors.black87,
+                        size: 28,
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
 
           // Chart
           SizedBox(
@@ -125,7 +147,15 @@ class DailySummaryChart extends StatelessWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (value, _) {
-                        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                        final days = [
+                          l10n.monday,
+                          l10n.tuesday,
+                          l10n.wednesday,
+                          l10n.thursday,
+                          l10n.friday,
+                          l10n.saturday,
+                          l10n.sunday
+                        ];
                         return Text(
                           days[value.toInt() % 7],
                           style: const TextStyle(

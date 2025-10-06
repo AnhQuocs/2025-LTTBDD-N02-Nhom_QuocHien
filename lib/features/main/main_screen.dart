@@ -1,6 +1,7 @@
 import 'package:fin_track/features/dashboard/ui/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../category/category_screen.dart';
 import '../settings/ui/setting_screen.dart';
 import '../statistics/presentation/statistics_screen.dart';
@@ -41,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       extendBody: true,
       body: PageView(
@@ -64,11 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
             type: BottomNavigationBarType.fixed,
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-              BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Statistic"),
-              BottomNavigationBarItem(icon: Icon(Icons.category_outlined), label: "Category"),
-              BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Setting"),
+            items: [
+              BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
+              BottomNavigationBarItem(icon: const Icon(Icons.bar_chart), label: l10n.statistic),
+              BottomNavigationBarItem(icon: const Icon(Icons.category_outlined), label: l10n.category),
+              BottomNavigationBarItem(icon: const Icon(Icons.settings), label: l10n.setting),
             ],
           ),
         ),

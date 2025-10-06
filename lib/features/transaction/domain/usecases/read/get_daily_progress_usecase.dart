@@ -1,4 +1,4 @@
-import '../repositories/transaction_repository.dart';
+import '../../repositories/transaction_repository.dart';
 
 class GetDailyProgressUseCase {
   final TransactionRepository repository;

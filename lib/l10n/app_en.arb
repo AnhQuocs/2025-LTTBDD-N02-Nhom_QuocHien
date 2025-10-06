@@ -39,8 +39,21 @@
   "category": "Category",
   "date": "Date",
   "note": "Note",
+
   "today": "Today",
   "daily": "Daily",
   "weekly": "Weekly",
-  "monthly": "Monthly"
+  "monthly": "Monthly",
+
+  "monday": "Mon",
+  "tuesday": "Tue",
+  "wednesday": "Wed",
+  "thursday": "Thu",
+  "friday": "Fri",
+  "saturday": "Sat",
+  "sunday": "Sun",
+
+  "home": "Home",
+  "statistic": "Statistic",
+  "setting": "Setting"
 }

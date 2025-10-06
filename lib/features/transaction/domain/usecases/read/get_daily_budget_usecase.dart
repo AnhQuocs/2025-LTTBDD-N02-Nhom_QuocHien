@@ -1,5 +1,5 @@
-import '../entities/daily_budget.dart';
-import '../repositories/transaction_repository.dart';
+import '../../entities/daily_budget.dart';
+import '../../repositories/transaction_repository.dart';
 
 class GetDailyBudgetUseCase {
   final TransactionRepository repository;

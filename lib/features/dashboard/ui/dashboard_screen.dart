@@ -266,7 +266,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                         child: SingleChildScrollView(
                           physics: BouncingScrollPhysics(),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch, // cho full width
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               TransactionTodayCard(),
 

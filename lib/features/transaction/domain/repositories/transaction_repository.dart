@@ -16,4 +16,18 @@ abstract class TransactionRepository {
     String? userId,
     required DateTime date,
   });
+
+  Future<double> getWeeklyAmount({
+    required DateTime startOfWeek,
+    required DateTime endOfWeek,
+    required TransactionType type,
+    String? userId,
+  });
+
+  Future<double> getMonthlyAmount({
+    required int year,
+    required int month,
+    required TransactionType type,
+    String? userId,
+  });
 }

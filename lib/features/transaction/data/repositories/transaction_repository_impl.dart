@@ -165,4 +165,50 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
     return result;
   }
+
+  /// Tính tổng income/expense theo tuần
+  @override
+  Future<double> getWeeklyAmount({
+    required DateTime startOfWeek,
+    required DateTime endOfWeek,
+    required TransactionType type,
+    String? userId,
+  }) async {
+    final transactions = getAllTransactions(userId: userId);
+
+    final filtered = transactions.where((tx) =>
+    tx.type == type &&
+        !tx.date.isBefore(startOfWeek) &&
+        !tx.date.isAfter(endOfWeek));
+
+    double total = 0.0;
+    for (var tx in filtered) {
+      total += tx.price;
+    }
+
+    return total;
+  }
+
+  /// Tính tổng income/expense theo tháng
+  @override
+  Future<double> getMonthlyAmount({
+    required int year,
+    required int month,
+    required TransactionType type,
+    String? userId,
+  }) async {
+    final transactions = getAllTransactions(userId: userId);
+
+    final filtered = transactions.where((tx) =>
+    tx.type == type &&
+        tx.date.year == year &&
+        tx.date.month == month);
+
+    double total = 0.0;
+    for (var tx in filtered) {
+      total += tx.price;
+    }
+
+    return total;
+  }
 }

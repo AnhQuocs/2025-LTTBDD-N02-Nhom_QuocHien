@@ -1,18 +1,20 @@
-import 'package:fin_track/features/transaction/domain/usecases/get_total_expense_usecase.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/daily_budget.dart';
 import '../../domain/entities/daily_summary.dart';
 import '../../domain/entities/transaction.dart';
-import '../../domain/usecases/add_transaction_usecase.dart';
-import '../../domain/usecases/delete_transaction_usecase.dart';
-import '../../domain/usecases/get_all_transaction_usecase.dart';
-import '../../domain/usecases/get_daily_budget_usecase.dart';
-import '../../domain/usecases/get_daily_progress_usecase.dart';
-import '../../domain/usecases/get_daily_summaries_usecase.dart';
-import '../../domain/usecases/get_total_balance_use_case.dart';
-import '../../domain/usecases/update_daily_pudget_usecase.dart';
-import '../../domain/usecases/update_transaction_usecase.dart';
+import '../../domain/usecases/create/add_transaction_usecase.dart';
+import '../../domain/usecases/delete/delete_transaction_usecase.dart';
+import '../../domain/usecases/read/get_all_transaction_usecase.dart';
+import '../../domain/usecases/read/get_daily_budget_usecase.dart';
+import '../../domain/usecases/read/get_daily_progress_usecase.dart';
+import '../../domain/usecases/read/get_daily_summaries_usecase.dart';
+import '../../domain/usecases/read/get_monthly_total_use_case.dart';
+import '../../domain/usecases/read/get_total_balance_use_case.dart';
+import '../../domain/usecases/read/get_total_expense_usecase.dart';
+import '../../domain/usecases/read/get_weekly_total_use_case.dart';
+import '../../domain/usecases/update/update_daily_pudget_usecase.dart';
+import '../../domain/usecases/update/update_transaction_usecase.dart';
 
 class TransactionViewModel extends ChangeNotifier {
   final AddTransactionUseCase addTransactionUseCase;
@@ -25,6 +27,8 @@ class TransactionViewModel extends ChangeNotifier {
   final UpdateDailyBudgetUseCase updateDailyBudgetUseCase;
   final GetDailyBudgetUseCase getDailyBudgetUseCase;
   final GetDailySummariesUseCase getDailySummariesUseCase;
+  final GetMonthlyTotalUseCase getMonthlyTotalUseCase;
+  final GetWeeklyTotalUseCase getWeeklyTotalUseCase;
 
   TransactionViewModel({
     required this.addTransactionUseCase,
@@ -36,7 +40,9 @@ class TransactionViewModel extends ChangeNotifier {
     required this.getDailyProgressUseCase,
     required this.updateDailyBudgetUseCase,
     required this.getDailyBudgetUseCase,
-    required this.getDailySummariesUseCase
+    required this.getDailySummariesUseCase,
+    required this.getWeeklyTotalUseCase,
+    required this.getMonthlyTotalUseCase
   });
 
   List<Transaction> _transactions = [];
@@ -166,6 +172,80 @@ class TransactionViewModel extends ChangeNotifier {
     } catch (e) {
       debugPrint('❌ Error loading summaries: $e');
       _error = e.toString();
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  // Weekly totals
+  double _weeklyIncome = 0.0;
+  double _weeklyExpense = 0.0;
+  double _weeklyBalance = 0.0;
+
+  double get weeklyIncome => _weeklyIncome;
+  double get weeklyExpense => _weeklyExpense;
+  double get weeklyBalance => _weeklyBalance;
+
+  Future<void> loadWeeklyTotals({String? userId, DateTime? date}) async {
+    _loading = true;
+    notifyListeners();
+
+    try {
+      final target = date ?? DateTime.now();
+      final startOfWeek = target.subtract(Duration(days: target.weekday - 1));
+      final endOfWeek = startOfWeek.add(const Duration(days: 6));
+
+      final result = await getWeeklyTotalUseCase.execute(
+        startOfWeek: startOfWeek,
+        endOfWeek: endOfWeek,
+        userId: userId,
+      );
+
+      _weeklyIncome = result['income'] ?? 0.0;
+      _weeklyExpense = result['expense'] ?? 0.0;
+      _weeklyBalance = result['balance'] ?? 0.0;
+
+    } catch (e) {
+      debugPrint('❌ Error loading weekly totals: $e');
+      _weeklyIncome = 0.0;
+      _weeklyExpense = 0.0;
+      _weeklyBalance = 0.0;
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  // Monthly totals
+  double _monthlyIncome = 0.0;
+  double _monthlyExpense = 0.0;
+  double _monthlyBalance = 0.0;
+
+  double get monthlyIncome => _monthlyIncome;
+  double get monthlyExpense => _monthlyExpense;
+  double get monthlyBalance => _monthlyBalance;
+
+  Future<void> loadMonthlyTotals({required int year, required int month, String? userId}) async {
+    _loading = true;
+    notifyListeners();
+
+    try {
+      final result = await getMonthlyTotalUseCase.execute(
+        year: year,
+        month: month,
+        userId: userId,
+      );
+
+      _monthlyIncome = result['income'] ?? 0.0;
+      _monthlyExpense = result['expense'] ?? 0.0;
+      _monthlyBalance = result['balance'] ?? 0.0;
+
+    } catch (e) {
+      debugPrint('❌ Error loading monthly totals: $e');
+      _monthlyIncome = 0.0;
+      _monthlyExpense = 0.0;
+      _monthlyBalance = 0.0;
     } finally {
       _loading = false;
       notifyListeners();

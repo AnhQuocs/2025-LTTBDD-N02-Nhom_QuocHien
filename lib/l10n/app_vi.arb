@@ -39,5 +39,16 @@
   "today": "Hôm nay",
   "daily": "Ngày",
   "weekly": "Tuần",
-  "monthly": "Tháng"
+  "monthly": "Tháng",
+  "monday": "Th 2",
+  "tuesday": "Th 3",
+  "wednesday": "Th 4",
+  "thursday": "Th 5",
+  "friday": "Th 6",
+  "saturday": "Th 7",
+  "sunday": "CN",
+
+  "home": "Trang chủ",
+  "statistic": "Thống kê",
+  "setting": "Cài đặt"
 }
