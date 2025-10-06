@@ -1,4 +1,4 @@
-import 'package:fin_track/features/dashboard/ui/segmented_control.dart';
+import 'package:fin_track/features/dashboard/ui/chart/segmented_control.dart';
 import 'package:fin_track/features/dashboard/ui/transaction_today_card.dart';
 import 'package:fin_track/features/transaction/presentation/viewmodel/transaction_view_model.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +33,8 @@ class _DashboardScreen extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final authViewModel = Provider.of<AuthViewModel>(context);
     final transactionViewModel = Provider.of<TransactionViewModel>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
 
     if (authViewModel.isLoading) {
       return const Center(child: CircularProgressIndicator());
@@ -48,231 +48,240 @@ class _DashboardScreen extends State<DashboardScreen> {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Color(0xFF00D09E),
-        body: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                  child: Padding(
-                      padding: EdgeInsets.only(top: 32),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+        body: SafeArea(
+          bottom: true,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topCenter,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "${l10n.hi}! ${l10n.welcome_back}",
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${l10n.hi}! ${l10n.welcome_back}",
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+
+                                        Text(
+                                          "${user!.displayName}",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              height: 0.5
+                                          ),
+                                        )
+                                      ],
                                     ),
 
-                                    Text(
-                                      "${user!.displayName}",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          height: 0.5
+                                    Container(
+                                      width: 28,
+                                      height: 28,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(100)
                                       ),
+                                      child: Icon(Icons.settings, color: Colors.black.withOpacity(0.7),),
                                     )
                                   ],
                                 ),
-
-                                Container(
-                                  width: 28,
-                                  height: 28,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(100)
-                                  ),
-                                  child: Icon(Icons.settings, color: Colors.black.withOpacity(0.7),),
-                                )
-                              ],
-                            ),
-                          ),
-
-                          SizedBox(height: 36,),
-
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.arrow_circle_up, color: Colors.black, size: 20,),
-                                      SizedBox(width: 4,),
-                                      Text(
-                                        l10n.total_balance,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-
-                                  Text(
-                                    "${transactionViewModel.totalBalance.toStringAsFixed(0)} ₫",
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500
-                                    ),
-                                  )
-                                ],
                               ),
 
-                              Container(
-                                width: 1,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.8)
-                                ),
-                              ),
+                              SizedBox(height: 24,),
 
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Icon(Icons.arrow_circle_down, color: Colors.black, size: 20,),
-                                      SizedBox(width: 4,),
-                                      Text(
-                                        l10n.total_expense,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-
-                                  Text(
-                                    "${transactionViewModel.totalExpense.toStringAsFixed(0)} ₫",
-                                    style: TextStyle(
-                                        fontSize: 24,
-                                        color: Color(0xFF0068FF),
-                                        fontWeight: FontWeight.w500
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-
-                          SizedBox(height: 16,),
-
-                          if (transactionViewModel.todayBudget == null ||
-                              transactionViewModel.todayBudget?.limit == 0)
-                            Column(
-                              children: [
-                                Text(
-                                  l10n.set_goal,
-                                  style: TextStyle(
-                                    fontSize: 16
-                                  ),
-                                ),
-
-                                SizedBox(height: 8,),
-
-                                InkWell(
-                                  onTap: () {
-                                    showDailyBudgetDialog(context);
-                                  },
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          Color(0xFF00416A),
-                                          Color(0xFF26B47E),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.arrow_circle_up, color: Colors.black, size: 20,),
+                                          SizedBox(width: 4,),
+                                          Text(
+                                            l10n.total_balance,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          )
                                         ],
                                       ),
-                                      borderRadius: BorderRadius.circular(8),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Color(0xFF00416A).withOpacity(0.4),
-                                          blurRadius: 4,
-                                          offset: Offset(0, 6),
+
+                                      Text(
+                                        "${transactionViewModel.totalBalance.toStringAsFixed(0)} ₫",
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500
                                         ),
-                                      ],
+                                      )
+                                    ],
+                                  ),
+
+                                  Container(
+                                    width: 1,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.8)
                                     ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 2),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
+                                  ),
+
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.wallet, size: 18, color: Colors.white),
-                                          SizedBox(width: 6),
+                                          Icon(Icons.arrow_circle_down, color: Colors.black, size: 20,),
+                                          SizedBox(width: 4,),
                                           Text(
-                                            l10n.set_now,
+                                            l10n.total_expense,
                                             style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
+                                              color: Colors.black,
                                             ),
-                                          ),
+                                          )
                                         ],
+                                      ),
+
+                                      Text(
+                                        "${transactionViewModel.totalExpense.toStringAsFixed(0)} ₫",
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            color: Color(0xFF0068FF),
+                                            fontWeight: FontWeight.w500
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+
+                              SizedBox(height: 16,),
+
+                              if (transactionViewModel.todayBudget == null ||
+                                  transactionViewModel.todayBudget?.limit == 0)
+                                Column(
+                                  children: [
+                                    Text(
+                                      l10n.set_goal,
+                                      style: TextStyle(
+                                          fontSize: 16
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 8,),
+
+                                    InkWell(
+                                      onTap: () {
+                                        showDailyBudgetDialog(context);
+                                      },
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Color(0xFF00416A),
+                                                Color(0xFF26B47E),
+                                              ],
+                                            ),
+                                            borderRadius: BorderRadius.circular(8),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Color(0xFF00416A).withOpacity(0.4),
+                                                blurRadius: 4,
+                                                offset: Offset(0, 6),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(vertical: 2),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(Icons.wallet, size: 18, color: Colors.white),
+                                                SizedBox(width: 6),
+                                                Text(
+                                                  l10n.set_now,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
                                       ),
                                     )
-                                  ),
+
+                                  ],
                                 )
-
-                              ],
-                            )
-                          else
-                            ExpenseProgressBar(
-                              spent: transactionViewModel.todayBudget?.spent ?? 0,
-                              limit: transactionViewModel.todayBudget?.limit ?? 0,
-                            )
-                        ],
-                      )
-                  )
-              ),
-            ),
-
-            Expanded(
-              flex: 6,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1FFF3),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
+                              else
+                                ExpenseProgressBar(
+                                  spent: transactionViewModel.todayBudget?.spent ?? 0,
+                                  limit: transactionViewModel.todayBudget?.limit ?? 0,
+                                )
+                            ],
+                          )
+                      ),
+                    )
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch, // cho full width
-                      children: [
-                        TransactionTodayCard(),
+              ),
 
-                        const SizedBox(height: 24),
-
-                        SegmentedControl(),
-                      ],
+              Expanded(
+                flex: 6,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF1FFF3),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
                     ),
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch, // cho full width
+                          children: [
+                            TransactionTodayCard(),
+
+                            const SizedBox(height: 8),
+
+                            SegmentedControl(),
+                          ],
+                        ),
+                      ),
+                    )
+                  ),
                 ),
-              ),
-            )
-          ],
-        ),
+              )
+            ],
+          ),
+        )
       );
     }
   }

@@ -12,5 +12,8 @@ abstract class TransactionRepository {
   double getDailyProgress(DateTime date);
   Future<DailyBudget?> getDailyBudget(DateTime date);
   Future<void> updateDailyBudget(DailyBudget dailyBudget);
-  Future<List<DailySummary>> getDailySummaries({String? userId});
+  Future<List<DailySummary>> getDailySummaries({
+    String? userId,
+    required DateTime date,
+  });
 }

@@ -119,32 +119,45 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
   /// Tính toán thu/chi theo ngày
   @override
-  Future<List<DailySummary>> getDailySummaries({String? userId}) async {
-    final transactions = await getAllTransactions(userId: userId);
+  Future<List<DailySummary>> getDailySummaries({
+    String? userId,
+    required DateTime date,
+  }) async {
+    final startOfWeek = DateTime(date.year, date.month, date.day)
+        .subtract(Duration(days: date.weekday - 1));
+    final endOfWeek = startOfWeek.add(const Duration(days: 6));
 
+    final transactions = await getAllTransactions(userId: userId);
     final Map<DateTime, DailySummary> summaryMap = {};
 
     for (var tx in transactions) {
-      final date = DateTime(tx.date.year, tx.date.month, tx.date.day);
+      final txDate = DateTime(tx.date.year, tx.date.month, tx.date.day);
 
-      if (!summaryMap.containsKey(date)) {
-        summaryMap[date] = DailySummary(date: date, income: 0, expense: 0);
+      if (txDate.isBefore(startOfWeek) || txDate.isAfter(endOfWeek)) continue;
+
+      if (!summaryMap.containsKey(txDate)) {
+        summaryMap[txDate] = DailySummary(date: txDate, income: 0.0, expense: 0.0);
       }
 
-      final current = summaryMap[date]!;
+      final current = summaryMap[txDate]!;
       if (tx.type == TransactionType.Income) {
-        summaryMap[date] = DailySummary(
-          date: date,
-          income: current.income + tx.price,
+        summaryMap[txDate] = DailySummary(
+          date: txDate,
+          income: (current.income + tx.price).toDouble(),
           expense: current.expense,
         );
       } else {
-        summaryMap[date] = DailySummary(
-          date: date,
+        summaryMap[txDate] = DailySummary(
+          date: txDate,
           income: current.income,
-          expense: current.expense + tx.price,
+          expense: (current.expense + tx.price).toDouble(),
         );
       }
+    }
+
+    for (int i = 0; i < 7; i++) {
+      final d = startOfWeek.add(Duration(days: i));
+      summaryMap.putIfAbsent(d, () => DailySummary(date: d, income: 0.0, expense: 0.0));
     }
 
     final result = summaryMap.values.toList()

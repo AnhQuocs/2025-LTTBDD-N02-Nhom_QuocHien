@@ -46,6 +46,11 @@ class TransactionViewModel extends ChangeNotifier {
   List<DailySummary> _summaries = [];
   List<DailySummary> get summaries => _summaries;
 
+  DateTime? _startOfWeek;
+  DateTime? _endOfWeek;
+  DateTime? get startOfWeek => _startOfWeek;
+  DateTime? get endOfWeek => _endOfWeek;
+
   bool _loading = false;
   String? _error;
 
@@ -134,8 +139,36 @@ class TransactionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadDailySummaries({String? userId}) async {
-    _summaries = await getDailySummariesUseCase(userId: userId);
+  Future<void> loadDailySummaries({String? userId, DateTime? date}) async {
+    _loading = true;
     notifyListeners();
+
+    try {
+      final target = date ?? DateTime.now();
+      _startOfWeek = target.subtract(Duration(days: target.weekday - 1));
+      _endOfWeek = _startOfWeek!.add(const Duration(days: 6));
+
+      debugPrint('📅 Loading summaries for week: $_startOfWeek → $_endOfWeek');
+
+      final all = await getDailySummariesUseCase(userId: userId);
+
+      // Lọc dữ liệu theo tuần
+      _summaries = all
+          .where((s) =>
+      s.date.isAfter(_startOfWeek!.subtract(const Duration(days: 1))) &&
+          s.date.isBefore(_endOfWeek!.add(const Duration(days: 1))))
+          .toList();
+
+      debugPrint('✅ Loaded ${_summaries.length} daily summaries');
+      for (var s in _summaries) {
+        debugPrint('  → ${s.date}: income=${s.income}, expense=${s.expense}');
+      }
+    } catch (e) {
+      debugPrint('❌ Error loading summaries: $e');
+      _error = e.toString();
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
   }
 }
