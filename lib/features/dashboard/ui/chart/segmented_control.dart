@@ -1,9 +1,11 @@
+import 'package:fin_track/features/dashboard/ui/chart/layout/weekly_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../transaction/presentation/viewmodel/transaction_view_model.dart';
 import 'layout/daily_layout.dart';
+import 'layout/monthly_layout.dart';
 
 class SegmentedControl extends StatefulWidget {
   const SegmentedControl({super.key});
@@ -61,9 +63,9 @@ class _SegmentedControlState extends State<SegmentedControl> {
       case 0:
         return const DailyLayout();
       case 1:
-        return _buildWeeklyLayout();
+        return const WeeklyLayout();
       case 2:
-        return _buildMonthlyLayout();
+        return const MonthlyLayout();
       default:
         return const SizedBox.shrink();
     }

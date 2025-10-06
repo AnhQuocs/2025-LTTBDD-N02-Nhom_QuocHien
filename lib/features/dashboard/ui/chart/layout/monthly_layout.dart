@@ -5,15 +5,16 @@ import 'package:provider/provider.dart';
 import '../../../../auth/presentation/viewmodel/auth_viewmodel.dart';
 import '../../../../transaction/presentation/viewmodel/transaction_view_model.dart';
 
-class WeeklyLayout extends StatefulWidget {
-  const WeeklyLayout({super.key});
+class MonthlyLayout extends StatefulWidget {
+  const MonthlyLayout({super.key});
 
   @override
-  State<WeeklyLayout> createState() => _WeeklyLayoutState();
+  State<MonthlyLayout> createState() => _MonthlyLayoutState();
 }
 
-class _WeeklyLayoutState extends State<WeeklyLayout> {
+class _MonthlyLayoutState extends State<MonthlyLayout> {
   bool _initialized = false;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void didChangeDependencies() {
@@ -24,9 +25,27 @@ class _WeeklyLayoutState extends State<WeeklyLayout> {
       final authViewModel = context.read<AuthViewModel>();
 
       if (authViewModel.user != null) {
-        viewModel.loadWeeklySummaries(userId: authViewModel.user!.uid);
+        viewModel.loadMonthlySummaries(userId: authViewModel.user!.uid).then((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _scrollToCurrentMonth(viewModel);
+          });
+        });
       }
       _initialized = true;
+    }
+  }
+
+  void _scrollToCurrentMonth(TransactionViewModel viewModel) {
+    final currentMonth = DateTime.now().month;
+    const double barWidth = 60;
+    final targetOffset = (currentMonth - 1) * barWidth;
+
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        targetOffset,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeOut,
+      );
     }
   }
 
@@ -46,16 +65,17 @@ class _WeeklyLayoutState extends State<WeeklyLayout> {
     final user = authViewModel.user!;
 
     return Container(
-      key: const ValueKey('weekly'),
+      key: const ValueKey('monthly'),
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: viewModel.loading
           ? const Center(child: CircularProgressIndicator())
           : SummaryChart(
-        period: SummaryPeriod.weekly,
-        summaries: viewModel.weeklySummaries,
-        startDate: viewModel.startOfMonth,
-        endDate: viewModel.endOfMonth,
+        period: SummaryPeriod.monthly,
+        summaries: viewModel.monthlySummaries,
+        startDate: DateTime(DateTime.now().year, 1, 1),
+        endDate: DateTime(DateTime.now().year, 12, 31),
+        scrollController: _scrollController,
         onSelectPeriod: () async {
           final picked = await showDatePicker(
             context: context,
@@ -64,10 +84,13 @@ class _WeeklyLayoutState extends State<WeeklyLayout> {
             lastDate: DateTime.now(),
           );
           if (picked != null) {
-            await viewModel.loadWeeklySummaries(
+            await viewModel.loadMonthlySummaries(
               userId: user.uid,
               date: picked,
             );
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollToCurrentMonth(viewModel);
+            });
           }
         },
       ),

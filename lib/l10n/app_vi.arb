@@ -48,6 +48,19 @@
   "saturday": "Th 7",
   "sunday": "CN",
 
+  "jan": "Thg 1",
+  "feb": "Thg 2",
+  "mar": "Thg 3",
+  "apr": "Thg 4",
+  "may": "Thg 5",
+  "jun": "Thg 6",
+  "jul": "Thg 7",
+  "aug": "Thg 8",
+  "sep": "Thg 9",
+  "oct": "Thg 10",
+  "nov": "Thg 11",
+  "dec": "Thg 12",
+
   "home": "Trang chủ",
   "statistic": "Thống kê",
   "setting": "Cài đặt"

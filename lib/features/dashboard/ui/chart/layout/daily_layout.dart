@@ -1,4 +1,4 @@
-import 'package:fin_track/features/dashboard/ui/chart/bar_chart.dart';
+import 'package:fin_track/features/dashboard/ui/chart/summary_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +24,7 @@ class _DailyLayoutState extends State<DailyLayout> {
       final authViewModel = context.read<AuthViewModel>();
 
       if (authViewModel.user != null) {
+        // 🔹 Load dữ liệu 7 ngày gần nhất
         viewModel.loadDailySummaries(userId: authViewModel.user!.uid);
       }
       _initialized = true;
@@ -51,9 +52,12 @@ class _DailyLayoutState extends State<DailyLayout> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: viewModel.loading
           ? const Center(child: CircularProgressIndicator())
-          : DailySummaryChart(
+          : SummaryChart(
+        period: SummaryPeriod.daily,
         summaries: viewModel.summaries,
-        onSelectWeek: () async {
+        startDate: viewModel.startOfWeek,
+        endDate: viewModel.endOfWeek,
+        onSelectPeriod: () async {
           final picked = await showDatePicker(
             context: context,
             initialDate: DateTime.now(),
@@ -67,7 +71,7 @@ class _DailyLayoutState extends State<DailyLayout> {
             );
           }
         },
-      ),
+      )
     );
   }
 }
