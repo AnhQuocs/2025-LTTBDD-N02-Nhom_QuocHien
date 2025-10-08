@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
 import 'features/auth/data/repository/user_repository_impl.dart';
@@ -17,6 +18,13 @@ import 'features/auth/domain/usecase/reset_password_usecase.dart';
 import 'features/auth/domain/usecase/sign_in_usecase.dart';
 import 'features/auth/domain/usecase/sign_out_usecase.dart';
 import 'features/auth/domain/usecase/sign_up_usecase.dart';
+import 'features/category/data/data_source/hive_category_data_source.dart';
+import 'features/category/data/respository/category_repository_impl.dart';
+import 'features/category/domain/entity/category.dart';
+import 'features/category/domain/usecase/add_category_usecase.dart';
+import 'features/category/domain/usecase/delete_category_usecase.dart';
+import 'features/category/domain/usecase/get_all_categories_usecase.dart';
+import 'features/category/presentation/viewmodel/category_viewmodel.dart';
 import 'features/transaction/domain/usecases/create/add_transaction_usecase.dart';
 import 'features/transaction/domain/usecases/delete/delete_transaction_usecase.dart';
 import 'features/transaction/domain/usecases/read/get_all_transaction_usecase.dart';
@@ -55,6 +63,24 @@ void main() async {
   final getTotalExpenseUseCase = GetTotalExpenseUseCase(repository);
   final getDailyProgressUseCase = GetDailyProgressUseCase(repository);
 
+  // Category
+  final hiveCategoryDataSource = HiveCategoryDataSource();
+  await hiveCategoryDataSource.init();
+
+  final categoryRepository = CategoryRepositoryImpl(hiveCategoryDataSource);
+
+  final getAllCategoriesUseCase = GetAllCategoriesUseCase(categoryRepository);
+  final addCategoryUseCase = AddCategoryUseCase(categoryRepository);
+  final deleteCategoryUseCase = DeleteCategoryUseCase(categoryRepository);
+
+  ChangeNotifierProvider(
+    create: (_) => CategoryViewModel(
+      getAllCategoriesUseCase: getAllCategoriesUseCase,
+      addCategoryUseCase: addCategoryUseCase,
+      deleteCategoryUseCase: deleteCategoryUseCase,
+    ),
+  );
+
   runApp(
     MultiProvider(
       providers: [
@@ -84,6 +110,15 @@ void main() async {
             getDailySummariesUseCase: GetDailySummariesUseCase(repository),
             getWeeklyTotalUseCase: GetWeeklyTotalUseCase(repository),
             getMonthlyTotalUseCase: GetMonthlyTotalUseCase(repository),
+          ),
+        ),
+
+        // CategoryViewModel provider
+        ChangeNotifierProvider(
+          create: (_) => CategoryViewModel(
+            getAllCategoriesUseCase: getAllCategoriesUseCase,
+            addCategoryUseCase: addCategoryUseCase,
+            deleteCategoryUseCase: deleteCategoryUseCase,
           ),
         ),
       ],

@@ -2,7 +2,7 @@ import 'package:fin_track/features/dashboard/ui/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../category/category_screen.dart';
+import '../category/presentation/ui/category_screen.dart';
 import '../settings/ui/setting_screen.dart';
 import '../statistics/presentation/statistics_screen.dart';
 

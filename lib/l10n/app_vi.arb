@@ -63,5 +63,28 @@
 
   "home": "Trang chủ",
   "statistic": "Thống kê",
-  "setting": "Cài đặt"
+  "setting": "Cài đặt",
+
+  "category_food": "Ăn uống",
+  "category_entertainment": "Giải trí",
+  "category_travel": "Du lịch",
+
+  "category_add_title": "Thêm danh mục",
+  "category_field_label": "Tên danh mục",
+  "category_not_chosen_icon": "Chưa chọn icon",
+  "category_chosen_icon": "Đã chọn:",
+  "category_choose_icon": "Chọn icon",
+  "category_cancel": "Hủy",
+  "category_save": "Lưu",
+  "category_delete_title": "Xóa danh mục",
+  "category_delete_message": "Bạn có chắc muốn xóa \"{name}\" không?",
+  "@category_delete_message": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "category_delete_confirm": "Xóa",
+  "icon_picker_title": "Chọn Icon"
 }

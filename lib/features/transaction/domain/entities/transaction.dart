@@ -1,4 +1,6 @@
 import 'package:hive/hive.dart';
+
+import '../../../category/domain/entity/category.dart';
 part 'transaction.g.dart';
 
 @HiveType(typeId: 0)
@@ -24,7 +26,7 @@ class Transaction extends HiveObject {
   double price;
 
   @HiveField(4)
-  String category;
+  Category category;
 
   @HiveField(5)
   DateTime date;

@@ -21,7 +21,7 @@ class TransactionAdapter extends TypeAdapter<Transaction> {
       userId: fields[1] as String,
       title: fields[2] as String,
       price: fields[3] as double,
-      category: fields[4] as String,
+      category: fields[4] as Category,
       date: fields[5] as DateTime,
       note: fields[6] as String?,
       type: fields[7] as TransactionType,

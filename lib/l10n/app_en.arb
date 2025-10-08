@@ -68,5 +68,28 @@
 
   "home": "Home",
   "statistic": "Statistic",
-  "setting": "Setting"
+  "setting": "Setting",
+
+  "category_food": "Food",
+  "category_entertainment": "Entertainment",
+  "category_travel": "Travel",
+
+  "category_add_title": "Add Category",
+  "category_field_label": "Category name",
+  "category_not_chosen_icon": "No icon chosen",
+  "category_chosen_icon": "Selected:",
+  "category_choose_icon": "Choose icon",
+  "category_cancel": "Cancel",
+  "category_save": "Save",
+  "category_delete_title": "Delete Category",
+  "category_delete_message": "Are you sure you want to delete \"{name}\"?",
+  "@category_delete_message": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "category_delete_confirm": "Delete",
+  "icon_picker_title": "Choose Icon"
 }
