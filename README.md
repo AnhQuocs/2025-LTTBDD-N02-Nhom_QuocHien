@@ -15,6 +15,7 @@ FinTrack là ứng dụng Flutter giúp người dùng theo dõi thu nhập, chi
 - ☁️ **Đăng nhập / đăng ký bằng Firebase Authentication.**
 - 📦 **Lưu trữ dữ liệu cục bộ bằng Hive** (hỗ trợ hoạt động offline, tự động load nhanh).
 - 🌍 **Đa ngôn ngữ:** Tiếng Việt 🇻🇳 & Tiếng Anh 🇬🇧.
-- ✨ Giao diện hiện đại, tối ưu cho cả điện thoại và tablet.
+- ✨ Giao diện hiện đại, tối ưu.
 
 ---
+
