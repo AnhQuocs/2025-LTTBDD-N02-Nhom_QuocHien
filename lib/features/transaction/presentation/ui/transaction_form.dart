@@ -82,6 +82,19 @@ class _TransactionFormState extends State<TransactionForm> {
     }
   }
 
+  Widget _buildIcon(String iconStr) {
+    final codePoint = int.tryParse(iconStr);
+    if (codePoint != null) {
+      return Icon(
+        IconData(codePoint, fontFamily: 'MaterialIcons'),
+        size: 32,
+        color: Colors.blue[700],
+      );
+    } else {
+      return Text(iconStr, style: const TextStyle(fontSize: 32));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -99,7 +112,6 @@ class _TransactionFormState extends State<TransactionForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 🏷️ Category header
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -108,7 +120,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 ),
                 child: Row(
                   children: [
-                    Text(_selectedCategory.icon, style: const TextStyle(fontSize: 32)),
+                    _buildIcon(_selectedCategory.icon),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
