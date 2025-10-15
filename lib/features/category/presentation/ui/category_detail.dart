@@ -1,6 +1,7 @@
 import 'package:fin_track/features/auth/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:fin_track/features/dashboard/ui/dashboard_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../transaction/domain/entities/transaction.dart';
@@ -137,6 +138,8 @@ class _CategoryDetail extends State<CategoryDetail> {
   }
 
   Widget _buildTransactionItem(Transaction tx) {
+    final timeString = DateFormat('HH:mm').format(tx.date);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: InkWell(
@@ -154,12 +157,12 @@ class _CategoryDetail extends State<CategoryDetail> {
             ],
           ),
           padding: EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Tên transaction + date
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              // Hàng trên: title + price
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     tx.title,
@@ -168,23 +171,34 @@ class _CategoryDetail extends State<CategoryDetail> {
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: 4),
                   Text(
-                    '${tx.date.day}/${tx.date.month}/${tx.date.year}',
-                    style: TextStyle(color: Colors.grey[600]),
+                    '${tx.type == TransactionType.Expense ? "-" : "+"} ${currencyFormat.format(tx.price)}',
+                    style: TextStyle(
+                      color: tx.type == TransactionType.Income
+                          ? Colors.green
+                          : Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),
-              // Giá trị + loại
-              Text(
-                '${tx.type == TransactionType.Expense ? "-" : "+"} ${currencyFormat.format(tx.price)}',
-                style: TextStyle(
-                  color: tx.type == TransactionType.Income
-                      ? Colors.green
-                      : Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+
+              const SizedBox(height: 6),
+
+              // Hàng dưới: date bên trái, time bên phải
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${tx.date.day}/${tx.date.month}/${tx.date.year}',
+                    style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                  ),
+                  Text(
+                    timeString,
+                    style: TextStyle(color: Colors.grey[500], fontSize: 13),
+                  ),
+                ],
               ),
             ],
           ),

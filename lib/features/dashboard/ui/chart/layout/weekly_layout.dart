@@ -54,23 +54,24 @@ class _WeeklyLayoutState extends State<WeeklyLayout> {
           : SummaryChart(
         period: SummaryPeriod.weekly,
         summaries: viewModel.weeklySummaries,
-        startDate: viewModel.startOfMonth,
-        endDate: viewModel.endOfMonth,
+        startDate: viewModel.startOfMonth ?? DateTime.now(),
+        endDate: viewModel.endOfMonth ?? DateTime.now(),
         onSelectPeriod: () async {
           final picked = await showDatePicker(
             context: context,
-            initialDate: DateTime.now(),
+            initialDate: viewModel.startOfMonth ?? DateTime.now(),
             firstDate: DateTime(2024, 1),
             lastDate: DateTime.now(),
           );
           if (picked != null) {
             await viewModel.loadWeeklySummaries(
               userId: user.uid,
-              date: picked,
+              month: picked,
             );
           }
         },
       ),
     );
+
   }
 }

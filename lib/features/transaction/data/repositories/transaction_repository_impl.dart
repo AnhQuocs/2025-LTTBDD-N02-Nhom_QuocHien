@@ -127,9 +127,12 @@ class TransactionRepositoryImpl implements TransactionRepository {
         .subtract(Duration(days: date.weekday - 1));
     final endOfWeek = startOfWeek.add(const Duration(days: 6));
 
+    print("🗓️ Showing week of $startOfWeek → $endOfWeek");
+
     final transactions = await getAllTransactions(userId: userId);
     final Map<DateTime, DailySummary> summaryMap = {};
 
+    print("📦 Total transactions = ${transactions.length}");
     for (var tx in transactions) {
       final txDate = DateTime(tx.date.year, tx.date.month, tx.date.day);
 
@@ -153,15 +156,23 @@ class TransactionRepositoryImpl implements TransactionRepository {
           expense: (current.expense + tx.price).toDouble(),
         );
       }
+
+      print("💰 ${txDate.toIso8601String()} | ${tx.type} = ${tx.price}");
     }
 
     for (int i = 0; i < 7; i++) {
       final d = startOfWeek.add(Duration(days: i));
-      summaryMap.putIfAbsent(d, () => DailySummary(date: d, income: 0.0, expense: 0.0));
+      summaryMap.putIfAbsent(
+          d, () => DailySummary(date: d, income: 0.0, expense: 0.0));
     }
 
     final result = summaryMap.values.toList()
       ..sort((a, b) => a.date.compareTo(b.date));
+
+    print("📅 Total summaries = ${result.length}");
+    for (var s in result) {
+      print("🧾 ${s.date}: income=${s.income}, expense=${s.expense}");
+    }
 
     return result;
   }

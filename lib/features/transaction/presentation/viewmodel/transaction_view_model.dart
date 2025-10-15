@@ -193,7 +193,7 @@ class TransactionViewModel extends ChangeNotifier {
     }
   }
 
-  // ---------------- WEEKLY SUMMARIES ----------------
+  // WEEKLY SUMMARIES
   List<DailySummary> _weeklySummaries = [];
   List<DailySummary> get weeklySummaries => _weeklySummaries;
 
@@ -202,51 +202,48 @@ class TransactionViewModel extends ChangeNotifier {
   DateTime? get startOfMonth => _startOfMonth;
   DateTime? get endOfMonth => _endOfMonth;
 
-  Future<void> loadWeeklySummaries({String? userId, DateTime? date}) async {
+  Future<void> loadWeeklySummaries({String? userId, DateTime? month}) async {
     _loading = true;
     notifyListeners();
 
     try {
-      final target = date ?? DateTime.now();
+      final target = month ?? DateTime.now();
       final firstDayOfMonth = DateTime(target.year, target.month, 1);
       final lastDayOfMonth = DateTime(target.year, target.month + 1, 0);
 
       _startOfMonth = firstDayOfMonth;
       _endOfMonth = lastDayOfMonth;
 
-      final all = await getDailySummariesUseCase(userId: userId);
+      List<DailySummary> weeks = [];
 
-      Map<int, List<DailySummary>> groupedByWeek = {};
+      // chia tháng thành các tuần (thứ 2 -> CN)
+      DateTime weekStart = firstDayOfMonth;
+      while (weekStart.isBefore(lastDayOfMonth)) {
+        DateTime weekEnd = weekStart.add(Duration(days: 6));
+        if (weekEnd.isAfter(lastDayOfMonth)) weekEnd = lastDayOfMonth;
 
-      for (final s in all) {
-        if (s.date.isBefore(firstDayOfMonth) || s.date.isAfter(lastDayOfMonth)) continue;
+        // gọi UseCase cho tuần này
+        final totals = await getWeeklyTotalUseCase.execute(
+          startOfWeek: weekStart,
+          endOfWeek: weekEnd,
+          userId: userId,
+        );
 
-        final weekOfMonth = _getWeekOfMonth(s.date);
-        groupedByWeek.putIfAbsent(weekOfMonth, () => []).add(s);
-      }
-
-      final List<DailySummary> weeks = [];
-
-      for (int i = 1; i <= 5; i++) {
-        final weekItems = groupedByWeek[i] ?? [];
-
-        final incomeSum = weekItems.fold<double>(0.0, (sum, s) => sum + (s.income ?? 0.0));
-        final expenseSum = weekItems.fold<double>(0.0, (sum, s) => sum + (s.expense ?? 0.0));
-
-        final weekStart = firstDayOfMonth.add(Duration(days: (i - 1) * 7));
         weeks.add(DailySummary(
           date: weekStart,
-          income: incomeSum,
-          expense: expenseSum,
+          income: totals['income'] ?? 0.0,
+          expense: totals['expense'] ?? 0.0,
         ));
+        weekStart = weekEnd.add(const Duration(days: 1));
       }
 
       _weeklySummaries = weeks;
+
       debugPrint('Weekly summaries: ${_weeklySummaries.map((w) => '${w.date.day}/${w.date.month}: +${w.income}, -${w.expense}').join(', ')}');
 
     } catch (e) {
       debugPrint('Error in loadWeeklySummaries: $e');
-      _weeklySummaries = List.generate(4, (i) => DailySummary(date: DateTime.now(), income: 0.0, expense: 0.0));
+      _weeklySummaries = [];
     } finally {
       _loading = false;
       notifyListeners();
@@ -260,7 +257,7 @@ class TransactionViewModel extends ChangeNotifier {
   }
 
 
-  // ---------------- MONTHLY SUMMARIES ----------------
+  // MONTHLY SUMMARIES
   List<DailySummary> _monthlySummaries = [];
   List<DailySummary> get monthlySummaries => _monthlySummaries;
 
@@ -272,27 +269,25 @@ class TransactionViewModel extends ChangeNotifier {
       final target = date ?? DateTime.now();
       final year = target.year;
 
-      final all = await getDailySummariesUseCase(userId: userId);
-
       final List<DailySummary> months = [];
 
       for (int month = 1; month <= 12; month++) {
-        final start = DateTime(year, month, 1);
-        final end = DateTime(year, month + 1, 0);
+        final totals = await getMonthlyTotalUseCase.execute(
+          year: year,
+          month: month,
+          userId: userId,
+        );
 
-        final items = all.where((s) =>
-        s.date.isAfter(start.subtract(const Duration(days: 1))) &&
-            s.date.isBefore(end.add(const Duration(days: 1))));
-
-        final incomeSum =
-        items.fold<double>(0.0, (sum, s) => sum + (s.income ?? 0.0));
-        final expenseSum =
-        items.fold<double>(0.0, (sum, s) => sum + (s.expense ?? 0.0));
-
-        months.add(DailySummary(date: start, income: incomeSum, expense: expenseSum));
+        // tạo DailySummary cho tháng
+        months.add(DailySummary(
+          date: DateTime(year, month, 1),
+          income: totals['income'] ?? 0.0,
+          expense: totals['expense'] ?? 0.0,
+        ));
       }
 
       _monthlySummaries = months;
+
       debugPrint(
           'Loaded monthly summaries: ${months.map((m) => '${m.date.month}/${m.date.year}: i=${m.income}, e=${m.expense}').toList()}');
     } catch (e) {
