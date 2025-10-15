@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import '../viewmodel/transaction_view_model.dart';
 
 class TransactionForm extends StatefulWidget {
   final Category category;
+
   const TransactionForm({super.key, required this.category});
 
   @override
@@ -33,6 +35,9 @@ class _TransactionFormState extends State<TransactionForm> {
   void initState() {
     super.initState();
     _selectedCategory = widget.category;
+
+    _selectedDate = DateTime.now();
+    _dateController.text = DateFormat('dd/MM/yyyy').format(_selectedDate!);
   }
 
   @override
@@ -64,7 +69,10 @@ class _TransactionFormState extends State<TransactionForm> {
         type: _selectedType,
       );
 
-      await context.read<TransactionViewModel>().addTransaction(tx, widget.category.id);
+      await context.read<TransactionViewModel>().addTransaction(
+        tx,
+        widget.category.id,
+      );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -74,9 +82,9 @@ class _TransactionFormState extends State<TransactionForm> {
       }
     } catch (e) {
       debugPrint('Error saving transaction: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }
@@ -87,7 +95,7 @@ class _TransactionFormState extends State<TransactionForm> {
     if (codePoint != null) {
       return Icon(
         IconData(codePoint, fontFamily: 'MaterialIcons'),
-        size: 32,
+        size: 48,
         color: Colors.blue[700],
       );
     } else {
@@ -113,21 +121,87 @@ class _TransactionFormState extends State<TransactionForm> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
+                height: 100,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: const Color(0xFF00D09E).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     _buildIcon(_selectedCategory.icon),
                     const SizedBox(width: 12),
+                    Text(
+                      _selectedCategory.name,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Transaction type dropdown
+              Container(
+                height: 56,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFDFF7E2),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    const Icon(Icons.currency_exchange, color: Colors.black87),
                     Expanded(
-                      child: Text(
-                        _selectedCategory.name,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2<TransactionType>(
+                          isExpanded: true,
+                          value: _selectedType,
+                          onChanged: (value) {
+                            if (value != null) setState(() => _selectedType = value);
+                          },
+                          items: TransactionType.values.map((type) {
+                            return DropdownMenuItem<TransactionType>(
+                              value: type,
+                              child: Text(
+                                (type == TransactionType.Expense
+                                    ? l10n.expenses
+                                    : l10n.income).toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+
+                          iconStyleData: const IconStyleData(
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                          ),
+
+                          dropdownStyleData: DropdownStyleData(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 6,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            maxHeight: 200,
+                            offset: const Offset(0, 4),
+                          ),
                         ),
                       ),
                     ),
@@ -137,60 +211,33 @@ class _TransactionFormState extends State<TransactionForm> {
 
               const SizedBox(height: 20),
 
-              // 💸 Transaction type dropdown
-              DropdownButtonFormField<TransactionType>(
-                value: _selectedType,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: const Color(0xFFDFF7E2),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide.none,
-                  ),
-                  prefixIcon: const Icon(Icons.category),
-                ),
-                items: TransactionType.values.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(
-                      type == TransactionType.Expense
-                          ? l10n.expenses
-                          : l10n.income,
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) setState(() => _selectedType = value);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              // 📝 Title
+              // Title
               TransactionFormTextField(
                 controller: _titleController,
                 hintText: l10n.title,
                 prefixIcon: Icons.text_fields,
-                validator: (value) =>
-                value == null || value.isEmpty ? l10n.validate_title_empty : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? l10n.validate_title_empty
+                    : null,
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
 
-              // 💰 Price
+              // Price
               TransactionFormTextField(
                 controller: _priceController,
                 hintText: l10n.price,
                 prefixIcon: Icons.account_balance_wallet,
                 suffixText: '₫',
                 keyboardType: TextInputType.number,
-                validator: (value) =>
-                value == null || value.isEmpty ? l10n.validate_price_empty : null,
+                validator: (value) => value == null || value.isEmpty
+                    ? l10n.validate_price_empty
+                    : null,
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
 
-              // 📅 Date picker
+              // Date picker
               TransactionFormTextField(
                 controller: _dateController,
                 hintText: l10n.date,
@@ -199,50 +246,89 @@ class _TransactionFormState extends State<TransactionForm> {
                 onTap: () async {
                   final picked = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.now(),
+                    initialDate: _selectedDate ?? DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
                   );
                   if (picked != null) {
+                    final now = DateTime.now();
+                    _selectedDate = DateTime(
+                      picked.year,
+                      picked.month,
+                      picked.day,
+                      now.hour,
+                      now.minute,
+                      now.second,
+                    );
+
                     setState(() {
-                      _selectedDate = picked;
-                      _dateController.text =
-                          DateFormat('dd/MM/yyyy').format(picked);
+                      _dateController.text = DateFormat(
+                        'dd/MM/yyyy',
+                      ).format(_selectedDate!);
                     });
                   }
                 },
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
 
-              // 🗒️ Note
-              TransactionFormTextField(
+              // Note
+              TextFormField(
                 controller: _noteController,
-                hintText: l10n.note,
-                prefixIcon: Icons.note,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                minLines: 5,
+                decoration: InputDecoration(
+                  hintText: l10n.note,
+                  filled: true,
+                  fillColor: const Color(0xFFDFF7E2),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 16,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 48),
 
-              // 💾 Save button
-              SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _isSaving ? null : _submit,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00D09E),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              Center(
+                child: Container(
+                  width: 180,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF00D09E), Color(0xFF00A67E)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
                   ),
-                  child: _isSaving
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                    l10n.save,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(32),
+                      onTap: _isSaving ? null : _submit,
+                      child: Center(
+                        child: Text(
+                          l10n.save,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -293,8 +379,8 @@ class TransactionFormTextField extends StatelessWidget {
         fillColor: const Color(0xFFDFF7E2),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none
-        )
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }

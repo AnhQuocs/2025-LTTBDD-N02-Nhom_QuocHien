@@ -258,15 +258,61 @@ class _CategoryDetail extends State<CategoryDetail> {
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                      child: Text(
-                        l10n.summary,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF333333),
-                        ),
-                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            l10n.summary,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF333333),
+                            ),
+                          ),
+
+                          Container(
+                            width: 180,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF00D09E), Color(0xFF00A67E)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(12),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TransactionForm(category: widget.category),
+                                    ),
+                                  );
+                                },
+                                child: Center(
+                                  child: Text(
+                                    l10n.add_transaction,
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
                     ),
+
                     Expanded(
                       child: filteredTransactions.isEmpty
                           ? Center(
@@ -280,6 +326,7 @@ class _CategoryDetail extends State<CategoryDetail> {
                       )
                           : ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
+                        physics: BouncingScrollPhysics(),
                         itemCount: filteredTransactions.length,
                         itemBuilder: (context, index) => _buildTransactionItem(
                           filteredTransactions[index],
@@ -294,47 +341,6 @@ class _CategoryDetail extends State<CategoryDetail> {
           ),
         ],
       ),
-
-      floatingActionButton: Container(
-        width: 180,
-        height: 44,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF00D09E), Color(0xFF00A67E)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 10,
-              offset: Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(32),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TransactionForm(category: widget.category),
-                ),
-              );
-            },
-            child: Center(
-              child: Text(
-                l10n.add_transaction,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-              ),
-            ),
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
