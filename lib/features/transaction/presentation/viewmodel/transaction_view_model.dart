@@ -12,6 +12,7 @@ import '../../domain/usecases/read/get_daily_summaries_usecase.dart';
 import '../../domain/usecases/read/get_monthly_total_use_case.dart';
 import '../../domain/usecases/read/get_total_balance_use_case.dart';
 import '../../domain/usecases/read/get_total_expense_usecase.dart';
+import '../../domain/usecases/read/get_transactions_by_category_id_use_case.dart';
 import '../../domain/usecases/read/get_weekly_total_use_case.dart';
 import '../../domain/usecases/update/update_daily_pudget_usecase.dart';
 import '../../domain/usecases/update/update_transaction_usecase.dart';
@@ -29,6 +30,7 @@ class TransactionViewModel extends ChangeNotifier {
   final GetDailySummariesUseCase getDailySummariesUseCase;
   final GetMonthlyTotalUseCase getMonthlyTotalUseCase;
   final GetWeeklyTotalUseCase getWeeklyTotalUseCase;
+  final GetTransactionsByCategoryIdUseCase getTransactionsByCategoryIdUseCase;
 
   TransactionViewModel({
     required this.addTransactionUseCase,
@@ -42,7 +44,8 @@ class TransactionViewModel extends ChangeNotifier {
     required this.getDailyBudgetUseCase,
     required this.getDailySummariesUseCase,
     required this.getWeeklyTotalUseCase,
-    required this.getMonthlyTotalUseCase
+    required this.getMonthlyTotalUseCase,
+    required this.getTransactionsByCategoryIdUseCase
   });
 
   List<Transaction> _transactions = [];
@@ -51,6 +54,9 @@ class TransactionViewModel extends ChangeNotifier {
 
   List<DailySummary> _summaries = [];
   List<DailySummary> get summaries => _summaries;
+
+  List<Transaction> _categoryTransactions = [];
+  List<Transaction> get categoryTransactions => _categoryTransactions;
 
   DateTime? _startOfWeek;
   DateTime? _endOfWeek;
@@ -285,6 +291,23 @@ class TransactionViewModel extends ChangeNotifier {
         12,
             (i) => DailySummary(date: DateTime.now(), income: 0.0, expense: 0.0),
       );
+    } finally {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadTransactionsByCategory(String categoryId, String? userId) async {
+    _loading = true;
+    notifyListeners();
+
+    try {
+      _categoryTransactions = getTransactionsByCategoryIdUseCase.call(
+        categoryId,
+        userId,
+      );
+    } catch (e) {
+      _error = e.toString();
     } finally {
       _loading = false;
       notifyListeners();

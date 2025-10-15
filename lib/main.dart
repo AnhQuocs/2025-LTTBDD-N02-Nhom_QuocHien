@@ -4,6 +4,7 @@ import 'package:fin_track/features/auth/presentation/viewmodel/auth_viewmodel.da
 import 'package:fin_track/features/main/main_screen.dart';
 import 'package:fin_track/features/transaction/data/datasource/hive_datasource.dart';
 import 'package:fin_track/features/transaction/data/repositories/transaction_repository_impl.dart';
+import 'package:fin_track/features/transaction/domain/usecases/read/get_transactions_by_category_id_use_case.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -110,6 +111,7 @@ void main() async {
             getDailySummariesUseCase: GetDailySummariesUseCase(repository),
             getWeeklyTotalUseCase: GetWeeklyTotalUseCase(repository),
             getMonthlyTotalUseCase: GetMonthlyTotalUseCase(repository),
+            getTransactionsByCategoryIdUseCase: GetTransactionsByCategoryIdUseCase(repository)
           ),
         ),
 

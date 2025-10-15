@@ -37,6 +37,7 @@
   "price": "Price",
   "validate_price_empty": "Price cannot be empty",
   "category": "Category",
+  "categories": "Categories",
   "date": "Date",
   "note": "Note",
 
@@ -74,6 +75,7 @@
   "category_entertainment": "Entertainment",
   "category_travel": "Travel",
 
+  "category_title": "Select a category to add a new expense and easily manage your spending",
   "category_add_title": "Add Category",
   "category_field_label": "Category name",
   "category_not_chosen_icon": "No icon chosen",
@@ -82,7 +84,7 @@
   "category_cancel": "Cancel",
   "category_save": "Save",
   "category_delete_title": "Delete Category",
-  "category_delete_message": "Are you sure you want to delete \"{name}\"?",
+  "category_delete_message": "Are you sure you want to delete \"{name}\"? All transactions related to this category will also be permanently deleted.",
   "@category_delete_message": {
     "placeholders": {
       "name": {

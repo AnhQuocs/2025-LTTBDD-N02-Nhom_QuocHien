@@ -125,7 +125,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                                     ),
 
                                     Text(
-                                      "${transactionViewModel.totalBalance.toStringAsFixed(0)} ₫",
+                                        currencyFormat.format(transactionViewModel.totalBalance),
                                       style: TextStyle(
                                           fontSize: 24,
                                           color: Colors.white,
@@ -161,7 +161,7 @@ class _DashboardScreen extends State<DashboardScreen> {
                                     ),
 
                                     Text(
-                                      "${transactionViewModel.totalExpense.toStringAsFixed(0)} ₫",
+                                      currencyFormat.format(transactionViewModel.totalExpense),
                                       style: TextStyle(
                                           fontSize: 24,
                                           color: Color(0xFF0068FF),
@@ -410,3 +410,9 @@ Future<void> showDailyBudgetDialog(BuildContext context) async {
     },
   );
 }
+
+final currencyFormat = NumberFormat.currency(
+  locale: 'vi_VN',
+  symbol: '₫',
+  decimalDigits: 0,
+);

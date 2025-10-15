@@ -211,4 +211,17 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
     return total;
   }
+
+  @override
+  List<Transaction> getTransactionsByCategoryId(String categoryId, String? userId) {
+    final all = hive.transactionBox.values.toList();
+
+    final filtered = all.where((tx) {
+      final matchesCategory = tx.category.id == categoryId;
+      final matchesUser = userId == null || tx.userId == userId;
+      return matchesCategory && matchesUser;
+    }).toList();
+
+    return filtered;
+  }
 }

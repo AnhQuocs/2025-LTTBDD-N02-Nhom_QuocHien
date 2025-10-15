@@ -30,4 +30,6 @@ abstract class TransactionRepository {
     required TransactionType type,
     String? userId,
   });
+
+  List<Transaction> getTransactionsByCategoryId(String categoryId, String? userId);
 }

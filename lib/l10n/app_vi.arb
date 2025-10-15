@@ -34,6 +34,7 @@
   "price": "Số tiền",
   "validate_price_empty": "Số tiền không được để trống",
   "category": "Danh mục",
+  "categories": "Danh mục",
   "date": "Ngày",
   "note": "Ghi chú",
   "today": "Hôm nay",
@@ -69,6 +70,7 @@
   "category_entertainment": "Giải trí",
   "category_travel": "Du lịch",
 
+  "category_title": "Chọn danh mục để thêm khoản chi và quản lý chi tiêu một cách dễ dàng.",
   "category_add_title": "Thêm danh mục",
   "category_field_label": "Tên danh mục",
   "category_not_chosen_icon": "Chưa chọn icon",
@@ -77,7 +79,7 @@
   "category_cancel": "Hủy",
   "category_save": "Lưu",
   "category_delete_title": "Xóa danh mục",
-  "category_delete_message": "Bạn có chắc muốn xóa \"{name}\" không?",
+  "category_delete_message": "Bạn có chắc muốn xóa \"{name}\" không? Tất cả các giao dịch liên quan đến danh mục này cũng sẽ bị xóa vĩnh viễn.",
   "@category_delete_message": {
     "placeholders": {
       "name": {

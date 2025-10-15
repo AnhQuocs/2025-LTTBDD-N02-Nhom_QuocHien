@@ -179,11 +179,9 @@ class _CategoryGridState extends State<CategoryGrid> {
           },
           onLongPress: () => _showDeleteDialog(category, viewModel),
           borderRadius: BorderRadius.circular(12),
-          child: Ink(
-            decoration: BoxDecoration(
-              color: Colors.blue[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
+          child: Material(
+            color: Colors.blue[100],
+            borderRadius: BorderRadius.circular(12),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
