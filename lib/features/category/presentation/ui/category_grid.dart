@@ -4,6 +4,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../transaction/presentation/ui/transaction_form.dart';
 import '../../domain/entity/category.dart';
 import '../viewmodel/category_viewmodel.dart';
+import 'category_detail.dart';
 import 'category_localization_helper.dart';
 
 class CategoryGrid extends StatefulWidget {
@@ -173,7 +174,9 @@ class _CategoryGridState extends State<CategoryGrid> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => TransactionForm(category: category),
+                builder: (_) => CategoryDetail(
+                  category: category,
+                ),
               ),
             );
           },

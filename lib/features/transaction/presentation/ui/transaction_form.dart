@@ -64,7 +64,7 @@ class _TransactionFormState extends State<TransactionForm> {
         type: _selectedType,
       );
 
-      await context.read<TransactionViewModel>().addTransaction(tx);
+      await context.read<TransactionViewModel>().addTransaction(tx, widget.category.id);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -73,7 +73,7 @@ class _TransactionFormState extends State<TransactionForm> {
         Navigator.pop(context);
       }
     } catch (e) {
-      debugPrint('❌ Error saving transaction: $e');
+      debugPrint('Error saving transaction: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );

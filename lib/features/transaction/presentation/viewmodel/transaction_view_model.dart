@@ -91,10 +91,17 @@ class TransactionViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> addTransaction(Transaction tx) async {
+  Future<void> addTransaction(Transaction tx, String categoryId) async {
     await addTransactionUseCase.call(tx);
+
     await loadTransactions(userId: tx.userId);
+
     await loadDailySummaries(userId: tx.userId);
+
+    if (_categoryTransactions.any((t) => t.category.id == categoryId) || tx.category.id == categoryId) {
+      _categoryTransactions.add(tx);
+      notifyListeners();
+    }
   }
 
   Future<void> updateTransaction(Transaction tx) async {
@@ -103,10 +110,13 @@ class TransactionViewModel extends ChangeNotifier {
     await loadDailySummaries(userId: tx.userId);
   }
 
-  Future<void> deleteTransaction(String id, {String? userId}) async {
+  Future<void> deleteTransaction(String id, {String? userId, String? categoryId}) async {
     await deleteTransactionUseCase.call(id);
     await loadTransactions(userId: userId);
     await loadDailySummaries(userId: userId);
+    if (categoryId != null) {
+      await loadTransactionsByCategory(categoryId, userId);
+    }
   }
 
   double getDailyProgress(DateTime date) => getDailyProgressUseCase.call(date);
@@ -162,7 +172,7 @@ class TransactionViewModel extends ChangeNotifier {
 
       debugPrint('Loading summaries for week: $_startOfWeek → $_endOfWeek');
 
-      final all = await getDailySummariesUseCase(userId: userId);
+      final all = await getDailySummariesUseCase(userId: userId, date: target);
 
       _summaries = all
           .where((s) =>
@@ -312,5 +322,25 @@ class TransactionViewModel extends ChangeNotifier {
       _loading = false;
       notifyListeners();
     }
+  }
+
+  Map<String, Map<String, double>> getTotalByCategory() {
+    final Map<String, Map<String, double>> totals = {};
+
+    for (var tx in _categoryTransactions) {
+      final categoryName = tx.category.name;
+
+      if (!totals.containsKey(categoryName)) {
+        totals[categoryName] = {'income': 0.0, 'expense': 0.0};
+      }
+
+      if (tx.type == TransactionType.Income) {
+        totals[categoryName]!['income'] = totals[categoryName]!['income']! + tx.price;
+      } else {
+        totals[categoryName]!['expense'] = totals[categoryName]!['expense']! + tx.price;
+      }
+    }
+
+    return totals;
   }
 }
