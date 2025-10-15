@@ -88,5 +88,17 @@
     }
   },
   "category_delete_confirm": "Xóa",
-  "icon_picker_title": "Chọn biểu tượng"
+  "icon_picker_title": "Chọn biểu tượng",
+
+  "summary": "Tổng quan",
+  "no_transaction": "Chưa có giao dịch nào",
+  "transaction_delete_title": "Xóa giao dịch",
+  "transaction_delete_message": "Bạn có chắc chắn muốn xóa \"{name}\" không?",
+  "@transaction_delete_message": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

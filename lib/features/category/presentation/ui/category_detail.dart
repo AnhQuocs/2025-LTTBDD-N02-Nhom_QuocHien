@@ -34,15 +34,34 @@ class _CategoryDetail extends State<CategoryDetail> {
     }
   }
 
+  Widget _buildIcon(String iconStr) {
+    final codePoint = int.tryParse(iconStr);
+    if (codePoint != null) {
+      return Icon(
+        IconData(codePoint, fontFamily: 'MaterialIcons'),
+        size: 32,
+        color: Colors.blue[700],
+      );
+    } else {
+      return Text(iconStr, style: const TextStyle(fontSize: 32));
+    }
+  }
+
+  TransactionType? _selectedType;
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<TransactionViewModel>();
-    final transactions = viewModel.categoryTransactions;
     final l10n = AppLocalizations.of(context)!;
+
+    final allTransactions = viewModel.categoryTransactions;
+
+    final filteredTransactions = _selectedType == null
+        ? allTransactions
+        : allTransactions.where((tx) => tx.type == _selectedType).toList();
 
     double totalIncome = 0.0;
     double totalExpense = 0.0;
-    for (var tx in transactions) {
+    for (var tx in allTransactions) {
       if (tx.type == TransactionType.Income) {
         totalIncome += tx.price;
       } else {
@@ -62,7 +81,7 @@ class _CategoryDetail extends State<CategoryDetail> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
@@ -71,7 +90,7 @@ class _CategoryDetail extends State<CategoryDetail> {
                   height: 80,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Color(0xFFDFF7E2),
+                    color: const Color(0xFFDFF7E2),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
@@ -80,14 +99,14 @@ class _CategoryDetail extends State<CategoryDetail> {
                     children: [
                       Text(
                         l10n.total_balance,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
                         currencyFormat.format(totalBalance),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -96,7 +115,7 @@ class _CategoryDetail extends State<CategoryDetail> {
                   ),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,45 +123,115 @@ class _CategoryDetail extends State<CategoryDetail> {
                   children: [
                     Flexible(
                       flex: 4,
-                      child: Container(
-                        height: 100,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Color(0xFFDFF7E2),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                          child: Column(
-                            children: [
-                              Icon(Icons.arrow_circle_up, size: 36, color: Color(0xFF00D09E)),
-                              Text(l10n.income, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-                              Text(currencyFormat.format(totalIncome), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
-                            ],
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () {
+                          setState(() {
+                            _selectedType = _selectedType == TransactionType.Income
+                                ? null
+                                : TransactionType.Income;
+                          });
+                        },
+                        child: Container(
+                          height: 100,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: _selectedType == TransactionType.Income
+                                ? const Color(0xFFB8F5D3)
+                                : const Color(0xFFDFF7E2),
+                            border: Border.all(
+                              color: _selectedType == TransactionType.Income
+                                  ? Color(0xFF009970)
+                                  : Colors.transparent,
+                              width: 2,
+                            ),
                           ),
-                        )
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  Icons.arrow_circle_up,
+                                  size: 32,
+                                  color: Color(0xFF00D09E),
+                                ),
+                                Text(
+                                  l10n.income,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  currencyFormat.format(totalIncome),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(width: 16),
+
+                    const SizedBox(width: 16),
+
                     Flexible(
                       flex: 4,
-                      child: Container(
-                        height: 100,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: Color(0xFFDFF7E2),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                          child: Column(
-                            children: [
-                              Icon(Icons.arrow_circle_down, size: 36, color: Color(0xFF0068FF)),
-                              Text(l10n.expenses, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-                              Text(currencyFormat.format(totalExpense), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
-                            ],
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () {
+                          setState(() {
+                            _selectedType = _selectedType == TransactionType.Expense
+                                ? null
+                                : TransactionType.Expense;
+                          });
+                        },
+                        child: Container(
+                          height: 100,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: _selectedType == TransactionType.Expense
+                                ? const Color(0xFFB8D9FF)
+                                : const Color(0xFFDFF7E2),
+                            border: Border.all(
+                              color: _selectedType == TransactionType.Expense
+                                  ? const Color(0xFF0068FF)
+                                  : Colors.transparent,
+                              width: 2,
+                            ),
                           ),
-                        )
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  Icons.arrow_circle_down,
+                                  size: 32,
+                                  color: Color(0xFF0068FF),
+                                ),
+                                Text(
+                                  l10n.expenses,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  currencyFormat.format(totalExpense),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -151,143 +240,177 @@ class _CategoryDetail extends State<CategoryDetail> {
             ),
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 20),
 
           Expanded(
-            child: transactions.isEmpty
-                ? const Center(
-                    child: Text(
-                      "No transactions yet",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFFF1FFF3),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(32),
+                  topRight: Radius.circular(32),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      child: Text(
+                        l10n.summary,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF333333),
+                        ),
+                      ),
                     ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: transactions.length,
-                    itemBuilder: (context, index) =>
-                        _buildTransactionItem(transactions[index]),
-                  ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TransactionForm(category: widget.category),
+                    Expanded(
+                      child: filteredTransactions.isEmpty
+                          ? Center(
+                        child: Text(
+                          l10n.no_transaction,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      )
+                          : ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: filteredTransactions.length,
+                        itemBuilder: (context, index) => _buildTransactionItem(
+                          filteredTransactions[index],
+                          widget.category.icon,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  Widget _buildSummary(double totalIncome, double totalExpense) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      color: Colors.grey[100],
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
-            children: [
-              Text(
-                'Total Income',
-                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-              ),
-              SizedBox(height: 4),
-              Text(
-                currencyFormat.format(totalIncome),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Text(
-                'Total Expense',
-                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-              ),
-              SizedBox(height: 4),
-              Text(
-                currencyFormat.format(totalExpense),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                ),
-              ),
-            ],
           ),
         ],
       ),
+
+      floatingActionButton: Container(
+        width: 180,
+        height: 44,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          gradient: const LinearGradient(
+            colors: [Color(0xFF00D09E), Color(0xFF00A67E)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(32),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TransactionForm(category: widget.category),
+                ),
+              );
+            },
+            child: Center(
+              child: Text(
+                l10n.add_transaction,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  Widget _buildTransactionItem(Transaction tx) {
+  Widget _buildTransactionItem(Transaction tx, icon) {
     final timeString = DateFormat('HH:mm').format(tx.date);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: InkWell(
         onLongPress: () => _showDeleteDialog(tx),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            color: Color(0xFF6DB6FE).withOpacity(0.5),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black12,
+                color: Colors.white10,
                 blurRadius: 4,
                 offset: Offset(0, 2),
               ),
             ],
           ),
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Hàng trên: title + price
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              _buildIcon(icon),
+
+              SizedBox(width: 8),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     tx.title,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    '${tx.type == TransactionType.Expense ? "-" : "+"} ${currencyFormat.format(tx.price)}',
+                    "$timeString - ${tx.date.day}/${tx.date.month}/${tx.date.year}",
                     style: TextStyle(
-                      color: tx.type == TransactionType.Income
-                          ? Colors.green
-                          : Colors.red,
+                      color: Color(0xFF0068FF),
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 6),
+              Spacer(),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '${tx.date.day}/${tx.date.month}/${tx.date.year}',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 13),
-                  ),
-                  Text(
-                    timeString,
-                    style: TextStyle(color: Colors.grey[500], fontSize: 13),
-                  ),
-                ],
+              Text(
+                '${tx.type == TransactionType.Expense ? "-" : "+"} ${currencyFormat.format(tx.price)}',
+                style: TextStyle(
+                  color: tx.type == TransactionType.Income
+                      ? Colors.green
+                      : Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: Container(
+                  width: 1,
+                  height: 30,
+                  color: Colors.grey.withOpacity(0.6),
+                ),
+              ),
+
+              InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () {
+                  // TODO: handle tap
+                },
+                child: Icon(Icons.edit, color: Color(0xFF00D09E), size: 24),
               ),
             ],
           ),
@@ -297,15 +420,17 @@ class _CategoryDetail extends State<CategoryDetail> {
   }
 
   void _showDeleteDialog(Transaction tx) {
+    final l10n = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete Transaction'),
-        content: Text('Are you sure you want to delete "${tx.title}"?'),
+        title: Text(l10n.transaction_delete_title),
+        content: Text(l10n.transaction_delete_message(tx.title)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -317,7 +442,7 @@ class _CategoryDetail extends State<CategoryDetail> {
               );
               Navigator.pop(context);
             },
-            child: Text('Delete', style: TextStyle(color: Colors.red)),
+            child: Text(l10n.delete, style: TextStyle(color: Colors.red)),
           ),
         ],
       ),

@@ -93,5 +93,17 @@
     }
   },
   "category_delete_confirm": "Delete",
-  "icon_picker_title": "Choose Icon"
+  "icon_picker_title": "Choose Icon",
+
+  "summary": "Summary",
+  "no_transaction": "No transactions yet",
+  "transaction_delete_title": "Delete Transaction",
+  "transaction_delete_message": "Are you sure you want to delete \"{name}\"?",
+  "@transaction_delete_message": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }
