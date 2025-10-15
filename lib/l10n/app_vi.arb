@@ -73,9 +73,9 @@
   "category_title": "Chọn danh mục để thêm khoản chi và quản lý chi tiêu một cách dễ dàng.",
   "category_add_title": "Thêm danh mục",
   "category_field_label": "Tên danh mục",
-  "category_not_chosen_icon": "Chưa chọn icon",
+  "category_not_chosen_icon": "Chưa chọn",
   "category_chosen_icon": "Đã chọn:",
-  "category_choose_icon": "Chọn icon",
+  "category_choose_icon": "Chọn biểu tượng",
   "category_cancel": "Hủy",
   "category_save": "Lưu",
   "category_delete_title": "Xóa danh mục",
@@ -88,5 +88,5 @@
     }
   },
   "category_delete_confirm": "Xóa",
-  "icon_picker_title": "Chọn Icon"
+  "icon_picker_title": "Chọn biểu tượng"
 }

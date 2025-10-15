@@ -73,11 +73,14 @@ class _CategoryScreen extends State<CategoryScreen> {
                         ],
                       ),
                       SizedBox(height: 8),
-                      Text(
-                        l10n.category_title,
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
-                        textAlign: TextAlign.center,
-                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          l10n.category_title,
+                          style: TextStyle(fontSize: 16, color: Colors.white70),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
                     ],
                   ),
                 ),
