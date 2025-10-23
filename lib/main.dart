@@ -1,3 +1,5 @@
+import 'package:fin_track/features/auth/domain/usecase/update_pass_use_case.dart';
+import 'package:fin_track/features/auth/domain/usecase/update_username_use_case.dart';
 import 'package:fin_track/features/auth/presentation/ui/sign_in_screen.dart';
 import 'package:fin_track/features/auth/presentation/ui/sign_up_screen.dart';
 import 'package:fin_track/features/auth/presentation/viewmodel/auth_viewmodel.dart';
@@ -93,6 +95,8 @@ void main() async {
             signOutUseCase: SignOutUseCase(authRepository),
             resetPasswordUseCase: ResetPasswordUseCase(authRepository),
             getCurrentUserUseCase: GetCurrentUserUseCase(authRepository),
+            updateUsernameUseCase: UpdateUsernameUseCase(authRepository),
+            updatePasswordUseCase: UpdatePasswordUseCase(authRepository)
           ),
         ),
 

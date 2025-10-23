@@ -2,6 +2,8 @@ import 'package:fin_track/features/auth/domain/usecase/reset_password_usecase.da
 import 'package:fin_track/features/auth/domain/usecase/sign_in_usecase.dart';
 import 'package:fin_track/features/auth/domain/usecase/sign_out_usecase.dart';
 import 'package:fin_track/features/auth/domain/usecase/sign_up_usecase.dart';
+import 'package:fin_track/features/auth/domain/usecase/update_pass_use_case.dart';
+import 'package:fin_track/features/auth/domain/usecase/update_username_use_case.dart';
 import 'package:flutter/cupertino.dart';
 import '../../domain/model/user.dart';
 import '../../domain/usecase/get_user_usecase.dart';
@@ -12,6 +14,8 @@ class AuthViewModel extends ChangeNotifier {
   final SignOutUseCase signOutUseCase;
   final ResetPasswordUseCase resetPasswordUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
+  final UpdateUsernameUseCase updateUsernameUseCase;
+  final UpdatePasswordUseCase updatePasswordUseCase;
 
   UserModel? _user;
   String? _error;
@@ -23,6 +27,8 @@ class AuthViewModel extends ChangeNotifier {
     required this.signOutUseCase,
     required this.resetPasswordUseCase,
     required this.getCurrentUserUseCase,
+    required this.updateUsernameUseCase,
+    required this.updatePasswordUseCase
   }) {
     loadCurrentUser();
   }
@@ -103,6 +109,34 @@ class AuthViewModel extends ChangeNotifier {
       } else {
         print('No user logged in');
       }
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateUsername(String newUsername) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      _user = await updateUsernameUseCase(newUsername);
+      _error = null;
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      _user = await updatePasswordUseCase(newPassword);
+      _error = null;
     } catch (e) {
       _error = e.toString();
     } finally {

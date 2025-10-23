@@ -66,3 +66,31 @@ class _SettingScreen extends State<SettingScreen> {
     );
   }
 }
+
+class SettingItem extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final VoidCallback onClick;
+
+  const SettingItem({
+    Key? key,
+    required this.icon,
+    required this.text,
+    required this.onClick,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onClick,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon),
+          const SizedBox(width: 8),
+          Text(text),
+        ],
+      ),
+    );
+  }
+}

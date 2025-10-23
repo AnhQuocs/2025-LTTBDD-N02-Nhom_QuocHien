@@ -8,4 +8,7 @@ abstract class AuthRepository {
   Stream<UserModel?> authStateChanges();
 
   Future<UserModel?> getUser();
+
+  Future<UserModel> updateUsername(String newUsername);
+  Future<UserModel> updatePassword(String newPassword);
 }

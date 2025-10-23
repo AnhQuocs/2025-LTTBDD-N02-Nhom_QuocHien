@@ -63,4 +63,36 @@ class AuthRepositoryImpl implements AuthRepository {
       displayName: user.displayName,
     );
   }
+
+  @override
+  Future<UserModel> updateUsername(String newUsername) async {
+    final user = service.currentUser;
+    if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user signed in');
+
+    await user.updateDisplayName(newUsername);
+    await user.reload();
+
+    final updatedUser = service.currentUser!;
+    return UserModel(
+      uid: updatedUser.uid,
+      email: updatedUser.email,
+      displayName: updatedUser.displayName,
+    );
+  }
+
+  @override
+  Future<UserModel> updatePassword(String newPassword) async {
+    final user = service.currentUser;
+    if (user == null) throw FirebaseAuthException(code: 'no-user', message: 'No user signed in');
+
+    await user.updatePassword(newPassword);
+    await user.reload();
+
+    final updatedUser = service.currentUser!;
+    return UserModel(
+      uid: updatedUser.uid,
+      email: updatedUser.email,
+      displayName: updatedUser.displayName,
+    );
+  }
 }
