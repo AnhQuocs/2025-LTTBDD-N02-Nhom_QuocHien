@@ -105,5 +105,19 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "account": "Account",
+  "language": "Language",
+  "help_center": "Help Center",
+  "privacy_policy": "Privacy Policy",
+
+  "username": "Username",
+  "new_username": "New username",
+  "password": "Password",
+  "new_password": "New password",
+  "apply": "Apply",
+  "growing_feat": "Growing features",
+  "confirm_logout": "Are you sure you want to log out?",
+  "confirm": "Confirm"
 }

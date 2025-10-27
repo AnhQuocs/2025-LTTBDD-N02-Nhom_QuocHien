@@ -100,5 +100,19 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "account": "Tài khoản",
+  "language": "Ngôn ngữ",
+  "help_center": "Trung tâm hỗ trợ",
+  "privacy_policy": "Chính sách bảo mật",
+
+  "username": "Tên người dùng",
+  "new_username": "Tên người dùng mới",
+  "password": "Mật khẩu",
+  "new_password": "Mật khẩu mới",
+  "apply": "Áp dụng",
+  "growing_feat": "Tính năng đang phát triển",
+  "confirm_logout": "Bạn có chắc muốn đăng xuất không?",
+  "confirm": "Xác nhận"
 }
