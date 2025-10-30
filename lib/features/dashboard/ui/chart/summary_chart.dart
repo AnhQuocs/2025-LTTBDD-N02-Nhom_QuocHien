@@ -73,13 +73,37 @@ class SummaryChart extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "${l10n.income} & ${l10n.expenses}",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "${l10n.income} & ${l10n.expenses}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                        ),
+                      ),
+
+                      SizedBox(width: 8,),
+
+                      Container(
+                        width: 8,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF00D09E),
+                          borderRadius: BorderRadius.circular(8)
+                        ),
+                      ),
+                      Text(" & ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                      Container(
+                        width: 8,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            color: Color(0xFF2F80ED),
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                      )
+                    ],
                   ),
                   if (startDate != null && endDate != null)
                     Text(
