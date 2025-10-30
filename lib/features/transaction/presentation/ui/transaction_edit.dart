@@ -1,18 +1,16 @@
-import 'dart:math';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../l10n/app_localizations.dart';
-import '../../../transaction/domain/entities/transaction.dart';
-import '../../../transaction/presentation/viewmodel/transaction_view_model.dart';
+import '../../domain/entities/transaction.dart';
+import '../viewmodel/transaction_view_model.dart';
 
 class EditTransactionScreen extends StatefulWidget {
   final Transaction transaction;
 
-  const EditTransactionScreen({Key? key, required this.transaction})
-    : super(key: key);
+  const EditTransactionScreen({super.key, required this.transaction});
 
   @override
   State<EditTransactionScreen> createState() => _EditTransactionScreenState();

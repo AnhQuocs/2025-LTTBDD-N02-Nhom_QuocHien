@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../l10n/app_localizations.dart';
 import '../category/presentation/ui/category_screen.dart';
 import '../settings/ui/setting_screen.dart';
-import '../statistics/presentation/statistics_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final void Function(Locale locale)? onLocaleChange;
@@ -51,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           DashboardScreen(onLocaleChange: widget.onLocaleChange),
-          const StatisticsScreen(),
           const CategoryScreen(),
           SettingScreen(onLocaleChange: widget.onLocaleChange),
         ],
@@ -69,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: _onItemTapped,
             items: [
               BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
-              BottomNavigationBarItem(icon: const Icon(Icons.bar_chart), label: l10n.statistic),
               BottomNavigationBarItem(icon: const Icon(Icons.category_outlined), label: l10n.category),
               BottomNavigationBarItem(icon: const Icon(Icons.settings), label: l10n.setting),
             ],

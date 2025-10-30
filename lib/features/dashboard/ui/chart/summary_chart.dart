@@ -117,6 +117,7 @@ class SummaryChart extends StatelessWidget {
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
+              clipBehavior: Clip.none,
               child: SizedBox(
                 width: _chartWidth(),
                 child: _buildBarChart(safeMaxY.toDouble(), xLabels, barGroups),

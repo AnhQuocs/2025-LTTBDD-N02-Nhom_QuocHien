@@ -9,7 +9,7 @@ import '../../../transaction/domain/entities/transaction.dart';
 import '../../../transaction/presentation/ui/transaction_form.dart';
 import '../../../transaction/presentation/viewmodel/transaction_view_model.dart';
 import '../../domain/entity/category.dart';
-import 'category_edit.dart';
+import '../../../transaction/presentation/ui/transaction_edit.dart';
 
 class CategoryDetail extends StatefulWidget {
   final Category category;
