@@ -9,6 +9,7 @@ import '../../../transaction/domain/entities/transaction.dart';
 import '../../../transaction/presentation/ui/transaction_form.dart';
 import '../../../transaction/presentation/viewmodel/transaction_view_model.dart';
 import '../../domain/entity/category.dart';
+import 'category_edit.dart';
 
 class CategoryDetail extends StatefulWidget {
   final Category category;
@@ -414,7 +415,12 @@ class _CategoryDetail extends State<CategoryDetail> {
               InkWell(
                 borderRadius: BorderRadius.circular(8),
                 onTap: () {
-                  // TODO: handle tap
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditTransactionScreen(transaction: tx),
+                    ),
+                  );
                 },
                 child: Icon(Icons.edit, color: Color(0xFF00D09E), size: 24),
               ),

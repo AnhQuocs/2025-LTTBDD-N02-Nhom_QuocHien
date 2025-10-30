@@ -8,6 +8,8 @@
   "income": "Thu nhập",
   "expenses": "Chi tiêu",
   "transactions": "Giao dịch",
+  "new_transaction": "Giao dịch mới",
+  "saved_success": "Đã lưu giao dịch",
   "view_all": "Xem tất cả",
   "logout": "Đăng xuất",
   "english": "Tiếng Anh",
@@ -114,5 +116,9 @@
   "apply": "Áp dụng",
   "growing_feat": "Tính năng đang phát triển",
   "confirm_logout": "Bạn có chắc muốn đăng xuất không?",
-  "confirm": "Xác nhận"
+  "confirm": "Xác nhận",
+  "edit_transaction": "Chỉnh sửa giao dịch",
+  "transaction_title": "Tên giao dịch",
+  "transaction_price": "Số tiền",
+  "changes_success": "Đã lưu chỉnh sửa"
 }

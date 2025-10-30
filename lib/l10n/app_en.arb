@@ -11,6 +11,8 @@
   "income": "Income",
   "expenses": "Expenses",
   "transactions": "Transactions",
+  "new_transaction": "New transaction",
+  "saved_success": "Transaction saved successfully",
   "view_all": "View All",
   "logout": "Logout",
   "english": "English",
@@ -119,5 +121,9 @@
   "apply": "Apply",
   "growing_feat": "Growing features",
   "confirm_logout": "Are you sure you want to log out?",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "edit_transaction": "Edit Transaction",
+  "transaction_title": "Transaction Title",
+  "transaction_price": "Transaction Price",
+  "changes_success": "Changes saved"
 }

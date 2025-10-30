@@ -57,6 +57,7 @@ class _TransactionFormState extends State<TransactionForm> {
     try {
       final authVm = context.read<AuthViewModel>();
       final userId = authVm.user?.uid ?? "";
+      final l10n = AppLocalizations.of(context)!;
 
       final tx = Transaction(
         id: UniqueKey().toString(),
@@ -76,7 +77,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Transaction saved successfully!')),
+          SnackBar(content: Text(l10n.saved_success)),
         );
         Navigator.pop(context);
       }
@@ -109,7 +110,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("New transaction"),
+        title: Text(l10n.new_transaction),
         backgroundColor: const Color(0xFF00D09E),
         foregroundColor: Colors.white,
       ),
