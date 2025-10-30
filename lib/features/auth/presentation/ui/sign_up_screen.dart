@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../viewmodel/auth_viewmodel.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -81,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       colors: [Colors.blue, Colors.purple],
                     ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
                     child: Text(
-                      'Create an Account',
+                      l10n.create_account,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -99,8 +101,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         TextFormField(
                           controller: _usernameController,
                           decoration: InputDecoration(
-                            labelText: "Username",
-                            hintText: "Enter your username",
+                            labelText: l10n.username,
+                            hintText: l10n.username_hint,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16)
                             ),
@@ -108,18 +110,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter a username";
+                              return l10n.username_empty;
                             }
                             if (value.length < 6) {
-                              return "Username must be at least 6 characters long";
+                              return l10n.username_short;
                             }
                             if (value.length > 20) {
-                              return "Username must be at most 20 characters long";
+                              return l10n.username_long;
                             }
                             if (!RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(value)) {
-                              return "Only letters, numbers, '.' and '_' are allowed";
+                              return l10n.username_invalid;
                             }
-                            return null; // hợp lệ
+                            return null;
                           },
                         ),
 
@@ -136,7 +138,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter your email";
+                              return l10n.email_empty;
                             }
                             if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                               return "Invalid email";
@@ -150,8 +152,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         TextFormField(
                           controller: _passwordController,
                           decoration: InputDecoration(
-                              labelText: "Password",
-                              hintText: "Enter your password",
+                              labelText: l10n.password,
+                              hintText: l10n.password_hint,
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                               prefixIcon: Icon(Icons.lock, color: Color(0xFF1976D2)),
                               suffixIcon: IconButton(
@@ -168,10 +170,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter your password";
+                              return l10n.password_empty;
                             }
                             if (value.length < 6) {
-                              return "The password must be at least 6 characters long";
+                              return l10n.password_short;
                             }
                             return null;
                           },
@@ -218,8 +220,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           final user = FirebaseAuth.instance.currentUser;
                                           if (user != null) {
                                             ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(
-                                                content: Text("Account created successfully!"),
+                                              SnackBar(
+                                                content: Text(l10n.signup_success),
                                                 backgroundColor: Colors.green,
                                                 duration: Duration(seconds: 2),
                                               ),
@@ -228,8 +230,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             Navigator.pushReplacementNamed(context, "/home");
                                           } else {
                                             ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(
-                                                content: Text("Sign up failed. Please try again."),
+                                              SnackBar(
+                                                content: Text(l10n.signup_failed),
                                                 backgroundColor: Colors.red,
                                                 duration: Duration(seconds: 3),
                                               ),
@@ -237,10 +239,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           }
                                         } on FirebaseAuthException catch (e) {
                                           String message = switch (e.code) {
-                                            "email-already-in-use" => "This email is already registered",
-                                            "weak-password" => "Password should be at least 6 characters",
-                                            "invalid-email" => "Invalid email format",
-                                            _ => "Sign up failed. Please try again"
+                                            "email-already-in-use" => l10n.email_in_use,
+                                            "weak-password" => l10n.weak_password,
+                                            "invalid-email" => l10n.email_invalid,
+                                            _ => l10n.signup_failed
                                           };
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
@@ -260,9 +262,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         });
                                       }
                                     },
-                                    child: const Center(
+                                    child: Center(
                                       child: Text(
-                                        "Sign Up",
+                                        l10n.sign_up_2,
                                         style: TextStyle(
                                           fontSize: 18,
                                           color: Colors.white,
@@ -290,7 +292,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
-                                "OR",
+                                l10n.or,
                                 style: TextStyle(color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -331,7 +333,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 SizedBox(width: 36),
                                 Text(
-                                  "Continue with Facebook",
+                                  l10n.continue_facebook,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18
@@ -370,7 +372,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 SizedBox(width: 56),
                                 Text(
-                                  "Continue with Google",
+                                  l10n.continue_google,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18,
@@ -389,7 +391,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Already have an account?",
+                              l10n.already_have_account,
                             ),
                             TextButton(
                               onPressed: () {
@@ -398,8 +400,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero
                               ),
-                              child: const Text(
-                                "SIGN IN",
+                              child: Text(
+                                l10n.sign_in_2,
                                 style: TextStyle(
                                     color: Color(0xFF1976D2)
                                 ),

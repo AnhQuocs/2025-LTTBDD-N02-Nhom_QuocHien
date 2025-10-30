@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../viewmodel/auth_viewmodel.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return ScaffoldMessenger(
       child: Scaffold(
@@ -81,7 +83,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               colors: [Colors.blue, Colors.purple],
                             ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
                             child: Text(
-                              'Welcome Back!',
+                              l10n.welcome_back,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 28,
@@ -108,10 +110,10 @@ class _SignInScreenState extends State<SignInScreen> {
                               keyboardType: TextInputType.emailAddress,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Please enter your email";
+                                  return l10n.email_empty;
                                 }
                                 if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                                  return "Invalid email";
+                                  return l10n.email_invalid;
                                 }
                                 return null;
                               },
@@ -120,8 +122,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             TextFormField(
                               controller: _passwordController,
                               decoration: InputDecoration(
-                                  labelText: "Password",
-                                  hintText: "Enter your password",
+                                  labelText: l10n.password,
+                                  hintText: l10n.password_hint,
                                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                                   prefixIcon: Icon(Icons.lock, color: Color(0xFF1976D2)),
                                   suffixIcon: IconButton(
@@ -138,10 +140,10 @@ class _SignInScreenState extends State<SignInScreen> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return "Please enter your password";
+                                  return l10n.password_empty;
                                 }
                                 if (value.length < 6) {
-                                  return "The password must be at least 6 characters long";
+                                  return l10n.password_short;
                                 }
                                 return null;
                               },
@@ -156,7 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                                 },
                                 child: Text(
-                                  "Forgot Password?",
+                                  l10n.forgot_password,
                                   style: TextStyle(
                                     color: Color(0xFF1976D2),
                                     decoration: TextDecoration.underline,
@@ -203,7 +205,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                               if (user != null) {
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBar(
-                                                    content: Text("Login successful!"),
+                                                    content: Text(l10n.login_success),
                                                     backgroundColor: Colors.green,
                                                     duration: Duration(seconds: 2),
                                                   ),
@@ -213,7 +215,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                               } else {
                                                 ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBar(
-                                                    content: Text("Login failed. Please try again."),
+                                                    content: Text(l10n.login_failed),
                                                     backgroundColor: Colors.red,
                                                     duration: Duration(seconds: 3),
                                                   ),
@@ -221,10 +223,10 @@ class _SignInScreenState extends State<SignInScreen> {
                                               }
                                             } on FirebaseAuthException catch (e) {
                                               String message = switch (e.code) {
-                                                "user-not-found" => "Email not found. Please register first",
-                                                "wrong-password" => "Incorrect password. Please try again",
-                                                "invalid-credential" => "Invalid credentials. Please check your email and password",
-                                                _ => "Login failed. Please try again"
+                                                "user-not-found" => l10n.user_not_found,
+                                                "wrong-password" => l10n.wrong_password,
+                                                "invalid-credential" => l10n.invalid_credential,
+                                                _ => l10n.login_failed
                                               };
                                               ScaffoldMessenger.of(context).showSnackBar(
                                                 SnackBar(
@@ -246,7 +248,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         },
                                         child: Center(
                                           child: Text(
-                                            "Sign In",
+                                            l10n.sign_in,
                                             style: TextStyle(
                                               fontSize: 18,
                                               color: Colors.white,
@@ -272,7 +274,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 16),
                                   child: Text(
-                                    "OR",
+                                    l10n.or,
                                     style: TextStyle(color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.w600),
                                   ),
                                 ),
@@ -311,7 +313,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     ),
                                     SizedBox(width: 36),
                                     Text(
-                                      "Continue with Facebook",
+                                      l10n.continue_facebook,
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18
@@ -348,7 +350,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     ),
                                     SizedBox(width: 56),
                                     Text(
-                                      "Continue with Google",
+                                      l10n.continue_google,
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18,
@@ -365,7 +367,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Don't have an account?",
+                                  l10n.dont_have_account,
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -374,8 +376,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                   style: TextButton.styleFrom(
                                       padding: EdgeInsets.zero
                                   ),
-                                  child: const Text(
-                                    "SIGN UP",
+                                  child: Text(
+                                    l10n.sign_up,
                                     style: TextStyle(
                                         color: Color(0xFF1976D2)
                                     ),
