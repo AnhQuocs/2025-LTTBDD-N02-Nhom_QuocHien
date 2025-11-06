@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/auth/data/repository/user_repository_impl.dart';
 import 'features/auth/data/source/firebase_auth_service.dart';
@@ -48,6 +49,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  // Đọc locale đã lưu
+  final prefs = await SharedPreferences.getInstance();
+  final savedLocaleCode = prefs.getString('locale') ?? 'en';
+  final initialLocale = Locale(savedLocaleCode);
+
   // Auth
   final authService = FirebaseAuthService();
   final authRepository = AuthRepositoryImpl(authService);
@@ -76,14 +82,6 @@ void main() async {
   final addCategoryUseCase = AddCategoryUseCase(categoryRepository);
   final deleteCategoryUseCase = DeleteCategoryUseCase(categoryRepository);
 
-  ChangeNotifierProvider(
-    create: (_) => CategoryViewModel(
-      getAllCategoriesUseCase: getAllCategoriesUseCase,
-      addCategoryUseCase: addCategoryUseCase,
-      deleteCategoryUseCase: deleteCategoryUseCase,
-    ),
-  );
-
   runApp(
     MultiProvider(
       providers: [
@@ -96,7 +94,7 @@ void main() async {
             resetPasswordUseCase: ResetPasswordUseCase(authRepository),
             getCurrentUserUseCase: GetCurrentUserUseCase(authRepository),
             updateUsernameUseCase: UpdateUsernameUseCase(authRepository),
-            updatePasswordUseCase: UpdatePasswordUseCase(authRepository)
+            updatePasswordUseCase: UpdatePasswordUseCase(authRepository),
           ),
         ),
 
@@ -115,7 +113,8 @@ void main() async {
             getDailySummariesUseCase: GetDailySummariesUseCase(repository),
             getWeeklyTotalUseCase: GetWeeklyTotalUseCase(repository),
             getMonthlyTotalUseCase: GetMonthlyTotalUseCase(repository),
-            getTransactionsByCategoryIdUseCase: GetTransactionsByCategoryIdUseCase(repository)
+            getTransactionsByCategoryIdUseCase:
+            GetTransactionsByCategoryIdUseCase(repository),
           ),
         ),
 
@@ -128,22 +127,31 @@ void main() async {
           ),
         ),
       ],
-      child: const MyApp(),
+      child: MyApp(initialLocale: initialLocale),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final Locale initialLocale;
+  const MyApp({super.key, required this.initialLocale});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = const Locale('en');
+  late Locale _locale;
 
-  void setLocale(Locale locale) {
+  @override
+  void initState() {
+    super.initState();
+    _locale = widget.initialLocale;
+  }
+
+  void setLocale(Locale locale) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('locale', locale.languageCode);
     setState(() {
       _locale = locale;
     });
@@ -189,11 +197,8 @@ class AuthWrapper extends StatelessWidget {
         }
 
         if (snapshot.hasData) {
-          // login -> load transactions for current user
-          final txVm = Provider.of<TransactionViewModel>(
-            context,
-            listen: false,
-          );
+          final txVm =
+          Provider.of<TransactionViewModel>(context, listen: false);
           txVm.loadTransactions(userId: snapshot.data!.uid);
           return HomeScreen(onLocaleChange: onLocaleChange);
         }

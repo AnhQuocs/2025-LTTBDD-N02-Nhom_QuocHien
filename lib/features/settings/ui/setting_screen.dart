@@ -2,7 +2,6 @@ import 'package:fin_track/features/settings/ui/setting_account.dart';
 import 'package:fin_track/features/settings/ui/setting_language.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../l10n/app_localizations.dart';
 import '../../auth/presentation/viewmodel/auth_viewmodel.dart';
 
@@ -12,33 +11,44 @@ class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key, this.onLocaleChange});
 
   @override
-  State<StatefulWidget> createState() => _SettingScreen();
+  State<StatefulWidget> createState() => _SettingScreenState();
 }
 
-class _SettingScreen extends State<SettingScreen> {
+class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final authViewModel = Provider.of<AuthViewModel>(context);
     final user = authViewModel.user;
 
+    // ✅ Nếu user null => hiển thị loading hoặc fallback
+    if (user == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 16),
+                padding: const EdgeInsets.only(top: 16),
                 child: Text(
                   l10n.setting,
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
 
               const SizedBox(height: 20),
 
+              // Avatar + user info
               Center(
                 child: Column(
                   children: [
@@ -50,20 +60,19 @@ class _SettingScreen extends State<SettingScreen> {
                       ),
                       child: Image.asset('assets/images/user_avatar.png'),
                     ),
-
+                    const SizedBox(height: 8),
                     Text(
-                      user!.displayName ?? 'User',
-                      style: TextStyle(
+                      user.displayName ?? 'User',
+                      style: const TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.w500
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-
                     Text(
                       user.email ?? '@example.com',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.blueGrey,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.blueGrey,
                       ),
                     ),
                   ],
@@ -76,37 +85,24 @@ class _SettingScreen extends State<SettingScreen> {
                 icon: Icons.person_2_outlined,
                 text: l10n.account,
                 onClick: () {
-                  navigateWithSlide(context, AccountScreen());
+                  navigateWithSlide(context, const AccountScreen());
                 },
               ),
 
-              const SizedBox(height: 18),
-
-              Container(
-                width: double.infinity,
-                height: 1,
-                color: Colors.grey.withOpacity(0.2),
-              ),
-
-              const SizedBox(height: 18),
+              const Divider(height: 36, color: Colors.black12),
 
               SettingItem(
                 icon: Icons.language_outlined,
                 text: l10n.language,
                 onClick: () {
-                  navigateWithSlide(context, LanguageScreen(onLocaleChange: widget.onLocaleChange,));
+                  navigateWithSlide(
+                    context,
+                    LanguageScreen(onLocaleChange: widget.onLocaleChange),
+                  );
                 },
               ),
 
-              const SizedBox(height: 18),
-
-              Container(
-                width: double.infinity,
-                height: 1,
-                color: Colors.grey.withOpacity(0.2),
-              ),
-
-              const SizedBox(height: 18),
+              const Divider(height: 36, color: Colors.black12),
 
               SettingItem(
                 icon: Icons.help_center_outlined,
@@ -114,13 +110,17 @@ class _SettingScreen extends State<SettingScreen> {
                 onClick: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(l10n.growing_feat, style: TextStyle(color: Colors.black),),
+                      content: Text(
+                        l10n.growing_feat,
+                        style: const TextStyle(color: Colors.black),
+                      ),
                       backgroundColor: Colors.greenAccent,
                       action: SnackBarAction(
                         label: 'Ok',
                         textColor: Colors.white,
                         onPressed: () {
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          ScaffoldMessenger.of(context)
+                              .hideCurrentSnackBar();
                         },
                       ),
                     ),
@@ -128,15 +128,7 @@ class _SettingScreen extends State<SettingScreen> {
                 },
               ),
 
-              const SizedBox(height: 18),
-
-              Container(
-                width: double.infinity,
-                height: 1,
-                color: Colors.grey.withOpacity(0.2),
-              ),
-
-              const SizedBox(height: 18),
+              const Divider(height: 36, color: Colors.black12),
 
               SettingItem(
                 icon: Icons.policy_outlined,
@@ -144,13 +136,17 @@ class _SettingScreen extends State<SettingScreen> {
                 onClick: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(l10n.growing_feat, style: TextStyle(color: Colors.black),),
+                      content: Text(
+                        l10n.growing_feat,
+                        style: const TextStyle(color: Colors.black),
+                      ),
                       backgroundColor: Colors.greenAccent,
                       action: SnackBarAction(
                         label: 'Ok',
                         textColor: Colors.white,
                         onPressed: () {
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          ScaffoldMessenger.of(context)
+                              .hideCurrentSnackBar();
                         },
                       ),
                     ),
@@ -158,15 +154,7 @@ class _SettingScreen extends State<SettingScreen> {
                 },
               ),
 
-              const SizedBox(height: 18),
-
-              Container(
-                width: double.infinity,
-                height: 1,
-                color: Colors.grey.withOpacity(0.2),
-              ),
-
-              const SizedBox(height: 18),
+              const Divider(height: 36, color: Colors.black12),
 
               SettingItem(
                 icon: Icons.logout,
@@ -216,40 +204,31 @@ class SettingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Icon(icon, color: Color(0xFF808080), size: 26),
-            SizedBox(width: 8),
-            Text(
-              text,
-              style: TextStyle(
-                fontSize: 17,
-                color: Colors.black.withOpacity(0.6),
-              ),
-            ),
-          ],
-        ),
-
-        GestureDetector(
-          onTap: onClick,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+    return InkWell(
+      onTap: onClick,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
             children: [
-              Padding(
-                padding: EdgeInsets.all(8),
-                child: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 22,
-                  color: Colors.black.withOpacity(0.5),
+              Icon(icon, color: const Color(0xFF808080), size: 26),
+              const SizedBox(width: 8),
+              Text(
+                text,
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.black.withOpacity(0.6),
                 ),
-              )
+              ),
             ],
           ),
-        ),
-      ],
+          const Icon(
+            Icons.arrow_forward_ios_rounded,
+            size: 20,
+            color: Colors.black54,
+          ),
+        ],
+      ),
     );
   }
 }
