@@ -1,6 +1,7 @@
 import 'package:fin_track/features/transaction/data/datasource/hive_datasource.dart';
 import 'package:fin_track/features/transaction/domain/entities/daily_budget.dart';
 import 'package:fin_track/features/transaction/domain/repositories/transaction_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../domain/entities/daily_summary.dart';
 import '../../domain/entities/transaction.dart';
@@ -55,24 +56,33 @@ class TransactionRepositoryImpl implements TransactionRepository {
 
   @override
   double getTotalBalance() {
-    double income = 0,
-        expense = 0;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return 0;
+
+    double income = 0, expense = 0;
+
     for (var tx in hive.transactionBox.values) {
-      if (tx.type == TransactionType.Income) {
-        income += tx.price;
-      } else {
-        expense += tx.price;
+      if (tx.userId == uid) {
+        if (tx.type == TransactionType.Income) {
+          income += tx.price;
+        } else if (tx.type == TransactionType.Expense) {
+          expense += tx.price;
+        }
       }
     }
+
     return income - expense;
   }
 
   @override
   double getTotalExpense() {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return 0;
+
     double expense = 0;
 
-    for(var tx in hive.transactionBox.values) {
-      if(tx.type == TransactionType.Expense) {
+    for (var tx in hive.transactionBox.values) {
+      if (tx.userId == uid && tx.type == TransactionType.Expense) {
         expense += tx.price;
       }
     }

@@ -291,7 +291,15 @@ class _SignInScreenState extends State<SignInScreen> {
                               width: double.infinity,
                               height: 50,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(l10n.growing_feat),
+                                      backgroundColor: Colors.greenAccent,
+                                      duration: const Duration(seconds: 3),
+                                    ),
+                                  );
+                                },
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12)
@@ -328,7 +336,15 @@ class _SignInScreenState extends State<SignInScreen> {
                               width: double.infinity,
                               height: 50,
                               child: OutlinedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(l10n.growing_feat),
+                                      backgroundColor: Colors.greenAccent,
+                                      duration: const Duration(seconds: 3),
+                                    ),
+                                  );
+                                },
                                 style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12)
