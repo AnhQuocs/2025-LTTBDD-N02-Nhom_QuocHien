@@ -51,16 +51,16 @@ class _UsernameScreen extends State<UsernameScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please enter a username";
+                        return l10n.username_empty;
                       }
                       if (value.length < 6) {
-                        return "Username must be at least 6 characters long";
+                        return l10n.username_short;
                       }
                       if (value.length > 20) {
-                        return "Username must be at most 20 characters long";
+                        return l10n.username_long;
                       }
                       if (!RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(value)) {
-                        return "Only letters, numbers, '.' and '_' are allowed";
+                        return l10n.username_invalid;
                       }
                       return null;
                     },
@@ -81,7 +81,7 @@ class _UsernameScreen extends State<UsernameScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                  'Username updated successfully!'),
+                                  l10n.update_success),
                             ),
                           );
                           Navigator.of(context).pop();

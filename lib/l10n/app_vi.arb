@@ -23,6 +23,7 @@
   "set_goal": "Thiết lập mục tiêu chi tiêu trong ngày của bạn!",
   "set_now": "Thiết lập",
   "update": "Cập nhật",
+  "update_success": "Cập nhật thành công",
   "set_daily_spending": "Thiết lập chi tiêu",
   "daily_spending_limit": "Giới hạn chi tiêu",
   "cancel": "Hủy",

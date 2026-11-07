@@ -26,6 +26,7 @@
   "set_goal": "Set your daily spending goal!",
   "set_now": "Set now",
   "update": "Update",
+  "update_success": "Successfully updated",
   "set_daily_spending": "Set Daily Spending",
   "daily_spending_limit": "Daily Spending Limit",
   "cancel": "Cancel",
